@@ -75,6 +75,7 @@ namespace MATRIX {//lab9
 
         //find special value
         //column/row initial, column/row final(0~Cols-1)
+        //可做局部比大小、加和
         T max(int row_i, int row_f, int col_i, int col_f) {
             T MAX = Mat[row_i][col_i];
             for (int i = row_i; i < row_f + 1; i++) {
