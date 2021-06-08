@@ -6,7 +6,7 @@
 #define WSL_MATRIX_H
 //structure
 namespace MATRIX {//lab9
-
+    using namespace std;
     template<typename T>
     class Matrix {
     private:
@@ -83,20 +83,35 @@ namespace MATRIX {//lab9
 
         void ShowMatrix(){
 
+            for (int i = 0; i < Rows; i++) {
+                for (int j = 0; j < Cols; j++) {
+                    cout<<Mat[i][j]<<" ";
+                }
+                cout<<endl;
+            }
+
         };
 
         //get some values of matrix
-//        T *Mat;
-//
-//        GetMatrix();
+        T ** GetMatrix(){
+            return Mat;
+        };
 
-        T GetSingleVal(int col, int row);
+        T GetItem(int col, int row){
+            return Mat[col][row];
+        };
 
-        T ChangeSingleVal(int col, int row, T val);
+        void ChangeItem(int col, int row, T val){
+            Mat[col][row]=val;
+        };
 
-        T *GetColum(int col);
+        T *GetColum(int col){
 
-        T *GetRow(int row);
+        };
+
+        T *GetRow(int row){
+
+        };
 
         //find special value
         //column/row initial, column/row final(0~Cols-1)
