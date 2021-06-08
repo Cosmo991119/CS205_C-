@@ -4,6 +4,8 @@
 
 #ifndef WSL_MATRIX_H
 #define WSL_MATRIX_H
+#include <complex>
+
 //structure
 namespace MATRIX {//lab9
     using namespace std;
@@ -40,13 +42,10 @@ namespace MATRIX {//lab9
 
         Matrix(int cols, int rows, T *p) : Cols(cols), Rows(rows), size(rows * cols) {
             Mat = new T *[rows];
-
             T *pr = p;
-
             for (int i = 0; i < rows; i++) {
                 Mat[i] = new T[cols];
                 for (int j = 0; j < cols; j++) {
-
                     Mat[i][j] = *(pr++);
                 }
             }
@@ -54,7 +53,6 @@ namespace MATRIX {//lab9
 
         Matrix(int cols, int rows, T **p) : Cols(cols), Rows(rows), size(rows * cols) {
             Mat = new T *[rows];
-
             for (int i = 0; i < rows; i++) {
                 Mat[i] = new T[cols];
                 for (int j = 0; j < cols; j++) {
@@ -65,7 +63,6 @@ namespace MATRIX {//lab9
 
         Matrix(const Matrix &mat) : Cols(mat.Cols), Rows(mat.Rows), size(mat.size) {
             Mat = new T *[mat.Rows];
-
 
             for (int i = 0; i < mat.Rows; i++) {
                 Mat[i] = new T[mat.Rows];
@@ -83,54 +80,54 @@ namespace MATRIX {//lab9
         }// deconstructor
 
         //get some values of matrix
-        int GetCols(){
+        int GetCols() {
             return Cols;
         };
 
-        int GetRows(){
+        int GetRows() {
             return Rows;
         };
 
-        int GetSize(){
+        int GetSize() {
             return size;
         };
 
-        void ShowMatrix(){
-            cout << "[ ";
+        void ShowMatrix() {
             for (int i = 0; i < Rows; i++) {
+                cout << "[ ";
                 for (int j = 0; j < Cols; j++) {
-                    cout<<Mat[i][j]<<" ";
+                    cout << Mat[i][j] << " ";
                 }
-                cout<< "]" << endl;
+                cout << "]" << endl;
             }
 
         };
 
 
-        T ** GetMatrix(){
+        T **GetMatrix() {
             return Mat;
         };
 
-        T GetItem(int col, int row){
+        T GetItem(int col, int row) {
             return Mat[col][row];
         };
 
-        void ChangeItem(int col, int row, T val){
-            Mat[col][row]=val;
+        void ChangeItem(int col, int row, T val) {
+            Mat[col][row] = val;
         };
 
-        T *GetColum(int col){
-            T* arr[Rows];
+        T *GetColum(int col) {
+            T *arr[Rows];
             for (int i = 0; i < Rows; ++i) {
-                arr[i]=Mat[col][1];
+                arr[i] = Mat[col][1];
             }
             return arr;
         };
 
-        T *GetRow(int row){
-            T* arr[Cols];
+        T *GetRow(int row) {
+            T *arr[Cols];
             for (int i = 0; i < Cols; ++i) {
-                arr[i]=Mat[i][row];
+                arr[i] = Mat[i][row];
             }
             return arr;
         };
@@ -169,40 +166,69 @@ namespace MATRIX {//lab9
             }
             return SUM;
         }
+        //这里要分开写了
+        T avg(int row_i, int row_f, int col_i, int col_f){
+            return sum( row_i,  row_f,  col_i,  col_f)/((row_f-row_i+1)*(col_f-col_i+1));
+        }
 
-        T trace();
+//        std::complex<double> avg(int row_i, int row_f, int col_i, int col_f){
+//
+//        }
 
-        T Det();
+        T trace() {
+            if (Cols != Rows)
+                throw "Not a square matrix! Cannot calculate trace!";
+            T TRACE;
+            for (int i = 0; i < Rows; i++)
+                TRACE += Mat[i][i];
+            return TRACE;
+        }
 
-        T avg();
+
+        T Det(){
+            if (Cols != Rows)
+                throw "Not a square matrix! Cannot calculate determinant!";
+
+        }
+
+
 
         T EigenValue();
 
         T EigenVector();//vector
 
         //advanced operator implement
-        void reshape(int cols,int rows){
-            if (cols*rows!=Cols*Rows){
+        void reshape(int cols, int rows) {
+            if (cols * rows != Cols * Rows) {
                 throw SizeErrorException("\033[31mSize Error: \033[0mthe matrixs must has same size.");
             }
 
-            Cols=cols;
-            Rows=rows;
+            Cols = cols;
+            Rows = rows;
 
         };//need to do throw exception
 
-        Matrix<T> inverse(){
+        Matrix<T> inverse() {
 
         }
 
-        Matrix<T> convlve(){
+        Matrix<T> convlve() {
 
         };
 
-        /*编译会报错我先注释掉了
 
-        //basic operator implement +,-,/,=,>>,
+        Matrix<T> operator+(const Matrix<T> &other)const{
+            if(Rows!=other.GetRows() || Cols !=other.GetCols())
+                throw "Size does not match! Cannot plus!";
+            Matrix<T> result(Rows,Cols);
+            for(int i=0;i<Rows;i++)
+                for(int j=0;j<Cols;j++)
+                    result[i][j] = Mat[i][j]+other[i][j];
+            return result;
+        }
 
+
+/*编译会报错我先注释掉了
 //*/
 
 //        void show() {
