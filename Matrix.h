@@ -4,6 +4,7 @@
 
 #ifndef WSL_MATRIX_H
 #define WSL_MATRIX_H
+
 #include <complex>
 
 //structure
@@ -57,15 +58,18 @@ namespace MATRIX {//lab9
         //other properity
         T **Mat;//lab12, a pointer to point the matrix
     public:
-
-        Matrix(int cols, int rows) : Cols(cols), Rows(rows), size(rows * cols) {
+        //hbx：我直接改了，先rows再cols
+        Matrix(int rows, int cols) : Rows(rows), Cols(cols), size(rows * cols) {
+            T a;
             Mat = new T *[rows];
             for (int i = 0; i < rows; i++) {
                 Mat[i] = new T[cols];
+                for (int j = 0; j < cols; j++)
+                    Mat[i][j] = a;//得显式初始化一下，不然乘法会不正常。（我也不知道为什么但实践得）
             }
         };
 
-        Matrix(int cols, int rows, T *p) : Cols(cols), Rows(rows), size(rows * cols) {
+        Matrix(int rows, int cols, T *p) : Rows(rows), Cols(cols), size(rows * cols) {
             Mat = new T *[rows];
             T *pr = p;
             for (int i = 0; i < rows; i++) {
@@ -76,7 +80,7 @@ namespace MATRIX {//lab9
             }
         }; //one dimension array
 
-        Matrix(int cols, int rows, T **p) : Cols(cols), Rows(rows), size(rows * cols) {
+        Matrix(int rows, int cols, T **p) : Rows(rows), Cols(cols), size(rows * cols) {
             Mat = new T *[rows];
             for (int i = 0; i < rows; i++) {
                 Mat[i] = new T[cols];
@@ -86,7 +90,7 @@ namespace MATRIX {//lab9
             }
         }; //two dimension array
 
-        Matrix(const Matrix &mat) : Cols(mat.Cols), Rows(mat.Rows), size(mat.size) {
+        Matrix(const Matrix &mat) : Rows(mat.Rows), Cols(mat.Cols), size(mat.size) {
             Mat = new T *[mat.Rows];
 
             for (int i = 0; i < mat.Rows; i++) {
@@ -105,15 +109,15 @@ namespace MATRIX {//lab9
         }// deconstructor
 
         //get some values of matrix
-        int GetCols() {
+        int GetCols() const {
             return Cols;
         };
 
-        int GetRows() {
+        int GetRows() const {
             return Rows;
         };
 
-        int GetSize() {
+        int GetSize() const {
             return size;
         };
 
@@ -191,14 +195,22 @@ namespace MATRIX {//lab9
             }
             return SUM;
         }
-        //这里要分开写了
-        T avg(int row_i, int row_f, int col_i, int col_f){
-            return sum( row_i,  row_f,  col_i,  col_f)/((row_f-row_i+1)*(col_f-col_i+1));
+
+
+        T avg(int row_i, int row_f, int col_i, int col_f) {
+            return sum(row_i, row_f, col_i, col_f) / ((row_f - row_i + 1) * (col_f - col_i + 1));
         }
 
 //        std::complex<double> avg(int row_i, int row_f, int col_i, int col_f){
 //
 //        }
+        Matrix<T> tran() {
+            Matrix TRAN(Cols, Rows);
+            for (int i = 0; i < Rows; i++)
+                for (int j = 0; j < Cols; j++)
+                    TRAN.Mat[j][i] = Mat[i][j];
+            return TRAN;
+        }
 
         T trace() {
             if (Cols != Rows)
@@ -209,13 +221,52 @@ namespace MATRIX {//lab9
             return TRACE;
         }
 
+        //要分清运行时exception和编译器报错的区别。后者可不是exception，是直接提醒使用者就是不能用。
+        Matrix<T> MatrixConj() {
+            Matrix result(Rows, Cols);
+            for (int i = 0; i < Rows; i++) {
+                for (int j = 0; j < Cols; j++) {
+                    result.Mat[i][j] = conj(Mat[i][j]);
+                }
+            }
+            return result;
+        }
 
-        T Det(){
-            if (Cols != Rows)
-                throw "Not a square matrix! Cannot calculate determinant!";
+        Matrix<T> Remainder(int i, int j) {
+            Matrix<T> remain_mat(Rows - 1, Cols - 1);
+            int m_i = 0;
+            for (int r_i = 0; r_i < remain_mat.Rows; r_i++) {
+                int m_j = 0;
+                for (int r_j = 0; r_j < remain_mat.Cols; r_j++) {
+                    if (m_j == j)
+                        m_j++;
+                    if (m_i == i)
+                        m_i++;
+                    remain_mat.Mat[r_i][r_j] = Mat[m_i][m_j];
+                    m_j++;
+                }
+                m_i++;
+                //remain_mat.ShowMatrix();
+            }
+            //remain_mat.ShowMatrix();
+            return remain_mat;
 
         }
 
+        T Det() {
+            if (Cols != Rows)
+                throw "Not a square matrix! Cannot calculate determinant!";
+            T det_val;
+            //Matrix<T> mat_mid(Rows,Cols);
+            if (Rows == 2)
+                return Mat[0][0] * Mat[1][1] - Mat[0][1] * Mat[1][0];
+            else {
+                for (int i = 0; i < Rows; i++)
+                    det_val += pow(-1, i) * Mat[i][0] * Remainder(i, 0).Det();
+            }
+            return det_val;
+
+        }
 
 
         T EigenValue();
@@ -344,14 +395,59 @@ namespace MATRIX {//lab9
 
         };
 
+        //居然要重写等号，虽然我不知道为什么，不写赋值就会有问题。
+        Matrix<T> operator=(const Matrix<T> &other) const {
 
-        Matrix<T> operator+(const Matrix<T> &other)const{
-            if(Rows!=other.GetRows() || Cols !=other.GetCols())
+            if (Rows != other.Rows || Cols != other.Cols)
+                throw "Size does not match! Cannot assign value!";
+            for (int i = 0; i < Rows; i++)
+                for (int j = 0; j < Cols; j++)
+                    Mat[i][j] = other.Mat[i][j];
+            //result.ShowMatrix();
+            return *this;
+        }
+
+        Matrix<T> operator+(const Matrix<T> &other) const {
+            if (Rows != other.Rows || Cols != other.Cols)
                 throw "Size does not match! Cannot plus!";
-            Matrix<T> result(Rows,Cols);
-            for(int i=0;i<Rows;i++)
-                for(int j=0;j<Cols;j++)
-                    result[i][j] = Mat[i][j]+other[i][j];
+            Matrix<T> result(Rows, Cols);//constructor反了，搞到这里直接转置了hhh
+            for (int i = 0; i < Rows; i++)
+                for (int j = 0; j < Cols; j++)
+                    result.Mat[i][j] = Mat[i][j] + other.Mat[i][j];
+            //result.ShowMatrix();
+            return result;
+        }
+
+        Matrix<T> operator-(const Matrix<T> &other) const {
+            if (Rows != other.Rows || Cols != other.Cols)
+                throw "Size does not match! Cannot minus!";
+            Matrix<T> result(Rows, Cols);
+            for (int i = 0; i < Rows; i++)
+                for (int j = 0; j < Cols; j++)
+                    result.Mat[i][j] = Mat[i][j] - other.Mat[i][j];
+            //result.ShowMatrix();
+            return result;
+        }
+
+
+        Matrix<T> operator*(const Matrix<T> &other) const {
+            if (Rows != other.Cols || Cols != other.Rows)
+                throw "Size does not match! Cannot multiply!";
+            Matrix<T> result(Rows, other.Cols);
+            for (int i = 0; i < Rows; i++)
+                for (int j = 0; j < other.Cols; j++)
+                    for (int k = 0; k < other.Rows; k++) {
+                        //cout<<"**********"<<endl;
+                        //result.ShowMatrix();
+                        result.Mat[i][j] += Mat[i][k] * other.Mat[k][j];
+                        //result.ShowMatrix();
+                    }
+            //result.ShowMatrix();
+            return result;
+        }
+
+        Matrix<T> Cross(const Matrix<T> &other) const {
+            Matrix<T> result(Rows, other.Cols);
             return result;
         }
 
