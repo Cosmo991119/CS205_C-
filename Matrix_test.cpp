@@ -44,27 +44,27 @@ int main(){
         (det_m.Remainder(0,0)).ShowMatrix();
         cout<<det_m.Det()<<endl;
 
-//        cout << "The rectangle matrix: " << endl;
-//        rec_m.ShowMatrix();
-//        cout << "max: " << rec_m.max(0, 1, 0, 2) << endl;
-//        cout << "min: " << rec_m.min(0, 1, 0, 2) << endl;
-//        cout << "sum: " << rec_m.sum(0, 1, 0, 2) << endl;
-//        cout << "avg: " << rec_m.avg(0, 1, 0, 2) << endl;
-//        cout<<"Matrix tran: "<<endl;
-//        Matrix<double> rec_m_tran(3,2);
-//        rec_m_tran=rec_m.tran();
-//        rec_m_tran.ShowMatrix();
-//        cout<<"Copy Matrix: "<<endl;
-//        rec_m1=rec_m;
-//        rec_m1.ShowMatrix();
-//        cout<<"Add result: "<<endl;
-//        rec_m = rec_m+rec_m;
-//        rec_m.ShowMatrix();
-//        cout<<"Minus result: "<<endl;
-//        rec_m = rec_m-rec_m1;
-//        rec_m.ShowMatrix();
-//        cout<<"Multiply result: "<<endl;
-//        (rec_m*rec_m1.tran()).ShowMatrix();
+        cout << "The rectangle matrix: " << endl;
+        rec_m.ShowMatrix();
+        cout << "max: " << rec_m.max(0, 1, 0, 2) << endl;
+        cout << "min: " << rec_m.min(0, 1, 0, 2) << endl;
+        cout << "sum: " << rec_m.sum(0, 1, 0, 2) << endl;
+        cout << "avg: " << rec_m.avg(0, 1, 0, 2) << endl;
+        cout<<"Matrix tran: "<<endl;
+        Matrix<double> rec_m_tran(3,2);
+        rec_m_tran=rec_m.tran();
+        rec_m_tran.ShowMatrix();
+        cout<<"Copy Matrix: "<<endl;
+        rec_m1=rec_m;
+        rec_m1.ShowMatrix();
+        cout<<"Add result: "<<endl;
+        rec_m = rec_m+rec_m;
+        rec_m.ShowMatrix();
+        cout<<"Minus result: "<<endl;
+        rec_m = rec_m-rec_m1;
+        rec_m.ShowMatrix();
+        cout<<"Multiply result: "<<endl;
+        (rec_m*rec_m1.tran()).ShowMatrix();
     }catch(const char* msg) {
         cerr << msg << endl;
     }
