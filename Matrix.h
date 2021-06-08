@@ -16,7 +16,6 @@ namespace MATRIX {//lab9
         //other properity
         T **Mat;//lab12, a pointer to point the matrix
     public:
-        Matrix() {}
 
         Matrix(int cols, int rows) : Cols(cols), Rows(rows), size(rows * cols) {
             Mat = new T *[rows];
