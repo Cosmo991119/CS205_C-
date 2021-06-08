@@ -67,8 +67,9 @@ namespace MATRIX {//lab9
                 delete[] Mat[i];
             }
             delete[] Mat;
-        }
+        }// deconstructor
 
+        //get some values of matrix
         int GetCols(){
             return Cols;
         };
@@ -82,17 +83,17 @@ namespace MATRIX {//lab9
         };
 
         void ShowMatrix(){
-
+            cout << "[ ";
             for (int i = 0; i < Rows; i++) {
                 for (int j = 0; j < Cols; j++) {
                     cout<<Mat[i][j]<<" ";
                 }
-                cout<<endl;
+                cout<< "]" << endl;
             }
 
         };
 
-        //get some values of matrix
+
         T ** GetMatrix(){
             return Mat;
         };
@@ -106,11 +107,19 @@ namespace MATRIX {//lab9
         };
 
         T *GetColum(int col){
-
+            T* arr[Rows];
+            for (int i = 0; i < Rows; ++i) {
+                arr[i]=Mat[col][1];
+            }
+            return arr;
         };
 
         T *GetRow(int row){
-
+            T* arr[Cols];
+            for (int i = 0; i < Cols; ++i) {
+                arr[i]=Mat[i][row];
+            }
+            return arr;
         };
 
         //find special value
@@ -172,16 +181,16 @@ namespace MATRIX {//lab9
         reshape();
 
         //basic operator implement +,-,/,=,>>,
-*/
-        void show() {
-            for (int i = 0; i < Rows; i++) {
-                std::cout << "[ ";
-                for (int j = 0; j < Cols; j++) {
-                    std::cout << Mat[i][j] << ' ';
-                }
-                std::cout << "]" << std::endl;
-            }
-        }
+//*/
+//        void show() {
+//            for (int i = 0; i < Rows; i++) {
+//                std::cout << "[ ";
+//                for (int j = 0; j < Cols; j++) {
+//                    std::cout << Mat[i][j] << ' ';
+//                }
+//                std::cout << "]" << std::endl;
+//            }
+//        } we have showMatrix() function
 
     };
 
