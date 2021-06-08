@@ -7,6 +7,20 @@
 //structure
 namespace MATRIX {//lab9
     using namespace std;
+
+    //exception
+    class SizeErrorException : exception {
+        string e;
+    public:
+        SizeErrorException(string msg) {
+            e = msg;
+        };
+
+        const char *what() const noexcept override {
+            return e.data();
+        }
+    };
+
     template<typename T>
     class Matrix {
     private:
@@ -166,21 +180,31 @@ namespace MATRIX {//lab9
 
         T EigenVector();//vector
 
-        /*编译会报错我先注释掉了
         //advanced operator implement
-        T *Mat
+        void reshape(int cols,int rows){
+            if (cols*rows!=Cols*Rows){
+                throw SizeErrorException("\033[31mSize Error: \033[0mthe matrixs must has same size.");
+            }
 
-        inverse();
+            Cols=cols;
+            Rows=rows;
 
-        T *Mat
+        };//need to do throw exception
 
-        convlve();//
-        T *Mat
+        Matrix<T> inverse(){
 
-        reshape();
+        }
+
+        Matrix<T> convlve(){
+
+        };
+
+        /*编译会报错我先注释掉了
 
         //basic operator implement +,-,/,=,>>,
+
 //*/
+
 //        void show() {
 //            for (int i = 0; i < Rows; i++) {
 //                std::cout << "[ ";
