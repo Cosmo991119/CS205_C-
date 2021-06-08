@@ -18,47 +18,72 @@ namespace MATRIX {//lab9
     public:
         Matrix() {}
 
-        Matrix(int cols, int rows) : Cols(cols), Rows(rows), size(rows * cols),
-                                     Mat(new T[rows * cols]) {};//default matrix
-        Matrix(int cols, int rows, int lens, T *val) : Cols(cols), Rows(rows), size(rows * cols),
-                                                       Mat(new T[rows * cols]) {
-            T *ptr;
-            ptr = Mat;
-            if (size >= lens) {
-                for (int i = 0; i < lens; i++) {
-                    *ptr = *val;
-                    ptr++;
-                    val++;
-                }
-            } else {
-                for (int i = 0; i < size; i++) {
-                    *ptr = *val;
-                    ptr++;
-                    val++;
-                }
+        Matrix(int cols, int rows) : Cols(cols), Rows(rows), size(rows * cols) {
+            Mat = new T *[rows];
+            for (int i = 0; i < rows; i++) {
+                Mat[i] = new T[cols];
             }
-
-        }; //one dimension array
+        };//default matrix
 
         Matrix(int cols, int rows, T *p) : Cols(cols), Rows(rows), size(rows * cols) {
-            Mat = new T *[Rows];
-            for (int i = 0; i < Rows; i++) {
-                Mat[i] = new T[Cols];
-                for (int j = 0; j < Cols; j++)
-                    Mat[i][j] = (p + i * Cols)[j];
+            Mat = new T *[rows];
+
+            T *pr = p;
+
+            for (int i = 0; i < rows; i++) {
+                Mat[i] = new T[cols];
+                for (int j = 0; j < cols; j++) {
+
+                    Mat[i][j] = *(pr++);
+                }
+            }
+        }; //one dimension array
+
+        Matrix(int cols, int rows, T **p) : Cols(cols), Rows(rows), size(rows * cols) {
+            Mat = new T *[rows];
+
+            for (int i = 0; i < rows; i++) {
+                Mat[i] = new T[cols];
+                for (int j = 0; j < cols; j++) {
+                    Mat[i][j] = p[i][j];
+                }
             }
         }; //two dimension array
 
-        Matrix(const Matrix &mat);//copy constructor, the size maybe different
-        ~Matrix() = default;//de
+        Matrix(const Matrix &mat) : Cols(mat.Cols), Rows(mat.Rows), size(mat.size) {
+            Mat = new T *[mat.Rows];
 
-        int GetCols();
 
-        int GetRows();
+            for (int i = 0; i < mat.Rows; i++) {
+                Mat[i] = new T[mat.Rows];
+                for (int j = 0; j < mat.Cols; j++) {
+                    Mat[i][j] = mat.Mat[i][j];
+                }
+            }
+        };//copy constructor, the size maybe different
 
-        int GetSize();
+        ~Matrix() {
+            for (int i = 0; i < Rows; i++) {
+                delete[] Mat[i];
+            }
+            delete[] Mat;
+        }
 
-        void ShowMatrix();
+        int GetCols(){
+            return Cols;
+        };
+
+        int GetRows(){
+            return Rows;
+        };
+
+        int GetSize(){
+            return size;
+        };
+
+        void ShowMatrix(){
+
+        };
 
         //get some values of matrix
 //        T *Mat;
