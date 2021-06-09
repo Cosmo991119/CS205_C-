@@ -9,6 +9,7 @@
 //opencv
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include <vector>
 
 //structure
 namespace MATRIX {//lab9
@@ -235,7 +236,14 @@ namespace MATRIX {//lab9
         }
 
 
-        T EigenValue();
+//        T EigenValue() {
+//            if (Cols != Rows)
+//                throw "\033[31mSize Error: \033[0mThe matrix is not square matrix!";//need to do throw exception
+//            if (Det() == 0)
+//                throw "Cannot use QR method. Not a Full-rank Matrix!"
+//
+//
+//        }
 
         T EigenVector();//vector
 
@@ -263,10 +271,10 @@ namespace MATRIX {//lab9
                 return Matrix(1, 1, ans);
             } else if (Cols == 2) {//2*2
                 int **ans[2][2];
-                ans[0][0] = Mat[1][1]/ this->Det();
-                ans[1][1] = Mat[0][0]/ this->Det();
-                ans[0][1] = -Mat[0][1]/ this->Det();
-                ans[1][0] = -Mat[1][0]/ this->Det();
+                ans[0][0] = Mat[1][1] / this->Det();
+                ans[1][1] = Mat[0][0] / this->Det();
+                ans[0][1] = -Mat[0][1] / this->Det();
+                ans[1][0] = -Mat[1][0] / this->Det();
                 return Matrix(2, 2, ans);
             } else {//
                 //Inverted triangle
@@ -346,15 +354,15 @@ namespace MATRIX {//lab9
                     }
 
                     for (int j = 0; j < Rows; j++) {
-                        t[i][j]/=f;
-                        IMatrix[i][j]/=f;
+                        t[i][j] /= f;
+                        IMatrix[i][j] /= f;
                     }
 
                     for (int j = 0; j < i; j++) {
                         T m = t[j][i];
                         for (int k = 0; k < Rows; k++) {
-                            t[j][k]-=m*t[i][k];
-                            IMatrix[j][k]-=m*IMatrix[i][k];
+                            t[j][k] -= m * t[i][k];
+                            IMatrix[j][k] -= m * IMatrix[i][k];
                         }
                     }
 
@@ -368,84 +376,84 @@ namespace MATRIX {//lab9
 
         //mid
         Matrix<T> conv_same(const Matrix<T> &kernal) {
-            int k_rows=kernal.Rows;
-            int k_cols=kernal.Cols;
+            int k_rows = kernal.Rows;
+            int k_cols = kernal.Cols;
             //kernal's pos
-            int k_x=(int) k_rows/2+1;
-            int k_y=(int) k_cols/2+1;;
+            int k_x = (int) k_rows / 2 + 1;
+            int k_y = (int) k_cols / 2 + 1;;
 
             T ans[Rows][Cols];
 
             for (int i = 0; i < Rows; i++) {
 
-                for (int j = 0; j <Cols; j++) {
+                for (int j = 0; j < Cols; j++) {
                     //calculate ans
-                    ans[i][j]=0;
+                    ans[i][j] = 0;
                     for (int k = 0; k < k_rows; k++) {
                         for (int l = 0; l < k_cols; ++l) {
-                            int p_x=i-(k_x-k);
-                            int p_y=j-(k_y-l);
+                            int p_x = i - (k_x - k);
+                            int p_y = j - (k_y - l);
 
-                            if (p_x<0 || p_x>=Rows || p_y<0||p_y>Cols){
+                            if (p_x < 0 || p_x >= Rows || p_y < 0 || p_y > Cols) {
                                 continue;
-                            } else{
-                                ans[i][j]+=Mat[p_x][p_y]*kernal.Mat[k][l];
+                            } else {
+                                ans[i][j] += Mat[p_x][p_y] * kernal.Mat[k][l];
                             }
                         }
                     }
                 }
             }
 
-            return Matrix<T>(Rows,Cols,*ans);
+            return Matrix<T>(Rows, Cols, *ans);
         };
 
         //[a,b:c,d] not include d,b
-        Matrix<T> slice(int a,int b,int c,int d){
-            if (a>=b||c>=d || a<0||b>=Rows||c<0||d>=Cols){
+        Matrix<T> slice(int a, int b, int c, int d) {
+            if (a >= b || c >= d || a < 0 || b >= Rows || c < 0 || d >= Cols) {
                 throw "\033[31mSlice Error!\033[31m";
             }
 
-            T ans[b-a][d-c];
-            for (int i = 0; i < b-a; i++) {
-                for (int j = 0; j < c-d; j++) {
-                    ans[i][j]=Mat[a+i][c+j];
+            T ans[b - a][d - c];
+            for (int i = 0; i < b - a; i++) {
+                for (int j = 0; j < c - d; j++) {
+                    ans[i][j] = Mat[a + i][c + j];
                 }
             }
 
-            return Matrix<T>(b-a,c-d,*ans);
+            return Matrix<T>(b - a, c - d, *ans);
         }
 
         //[a,b:]
-        Matrix<T> slice(int a,int b,int type){
-            if (a>=b){
+        Matrix<T> slice(int a, int b, int type) {
+            if (a >= b) {
                 throw "\033[31mSlice Error!\033[31m";
             }
 
-            if (type==-1){
-                if (a<0||b>=Rows){
+            if (type == -1) {
+                if (a < 0 || b >= Rows) {
                     throw "\033[31mSlice Error!\033[31m";
                 }
-                T ans[b-a][Cols];
-                for (int i = 0; i < b-a; i++) {
+                T ans[b - a][Cols];
+                for (int i = 0; i < b - a; i++) {
                     for (int j = 0; j < Cols; j++) {
-                        ans[i][j]=Mat[a+i][j];
+                        ans[i][j] = Mat[a + i][j];
                     }
                 }
 
-                return Matrix<T>(b-a,Cols,*ans);
+                return Matrix<T>(b - a, Cols, *ans);
 
-            } else if (type==-2){
-                if (a<0||b>=Cols){
+            } else if (type == -2) {
+                if (a < 0 || b >= Cols) {
                     throw "\033[31mSlice Error!\033[31m";
                 }
-                T ans[Rows][b-a];
+                T ans[Rows][b - a];
                 for (int i = 0; i < Rows; i++) {
-                    for (int j = 0; j < b-a; j++) {
-                        ans[i][j]=Mat[i][a+j];
+                    for (int j = 0; j < b - a; j++) {
+                        ans[i][j] = Mat[i][a + j];
                     }
                 }
 
-                return Matrix<T>(Rows,b-a,*ans);
+                return Matrix<T>(Rows, b - a, *ans);
             }
         }
 
@@ -481,12 +489,12 @@ namespace MATRIX {//lab9
 //        }
 
             //openCV
-            Mat
+//            Mat
 
 
         //居然要重写等号，虽然我不知道为什么，不写赋值就会有问题。
         Matrix<T> operator=(const Matrix<T> &other) const {
-
+            //TODO: more specific
             if (Rows != other.Rows || Cols != other.Cols)
                 throw "\033[31mSize does not match! Cannot assign value!\033[31m";
             for (int i = 0; i < Rows; i++)
@@ -535,13 +543,145 @@ namespace MATRIX {//lab9
             return result;
         }
 
-        Matrix<T> Cross(const Matrix<T> &other) const {
+        Matrix<T> eleWiseMul(const Matrix<T> &other) const {
+            if (Rows != other.Rows || Cols != other.Cols)
+                throw "\033[31mSize does not match! Cannot element-wize multiply!\033[31m";
             Matrix<T> result(Rows, other.Cols);
+            for (int i = 0; i < Rows; i++)
+                for (int j = 0; j < other.Cols; j++)
+                    result.Mat[i][j] = Mat[i][j] * other.Mat[i][j];
+            return result;
+        }
+
+        Matrix<T> operator*(const T k) const {
+            Matrix<T> result(Rows, Cols);
+            for (int i = 0; i < Rows; i++)
+                for (int j = 0; j < Cols; j++)
+                    result.Mat[i][j] = k * result.Mat[i][j];
+            return result;
+        }
+
+        Matrix<T> operator/(const T k) const {
+            Matrix<T> result(Rows, Cols);
+            for (int i = 0; i < Rows; i++)
+                for (int j = 0; j < Cols; j++)
+                    result.Mat[i][j] = result.Mat[i][j] / k;
+            return result;
+        }
+
+        Matrix<T> CrossRow(const Matrix<T> &other) const {//行向量乘行向量,返回3维向量
+            if (Rows != 1 || other.Rows != 1)
+                throw "Not vectors! Cannot done cross product";
+            Matrix<T> result(1, 3);
+            if (Cols == 1) {
+                result.Mat[0][0] = 0;
+                result.Mat[0][1] = 0;
+                result.Mat[0][2] = 0;
+            } else if (Cols == 2) {
+                result.Mat[0][0] = 0;
+                result.Mat[0][0] = 0;
+                result.Mat[0][0] = Mat[0][0] * other.Mat[0][1] - Mat[0][1] * other.Mat[0][0];
+            } else if (Cols == 3) {
+                result.Mat[0][0] = Mat[0][1] * other.Mat[0][2] - Mat[0][2] * other.Mat[0][1];
+                result.Mat[0][0] = Mat[0][2] * other.Mat[0][0] - Mat[0][0] * other.Mat[0][2];
+                result.Mat[0][0] = Mat[0][0] * other.Mat[0][1] - Mat[0][1] * other.Mat[0][0];
+            }
             return result;
         }
 
 
     };
+
+    template<typename T>
+    class SparseMatrix {
+    private:
+        int Rows;
+        int Cols;
+        int Items;
+        T *row;
+        T *col;
+        T *val;
+        int itemMax;
+    public:
+        SparseMatrix(int rows, int cols) : Rows(rows), Cols(cols), itemMax(rows * cols) {
+            T a;
+            Items = 0;
+            row = new T[itemMax];
+            col = new T[itemMax];
+            val = new T[itemMax];
+            for (int i = 0; i < itemMax; i++) {
+                row[i] = a;
+                col[i] = a;
+                val[i] = a;
+            }
+        }
+
+        SparseMatrix(int rows, int cols, int items, T *row_in, T *col_in, T *val_in) : Rows(rows), Cols(cols),
+                                                                                       Items(items),
+                                                                                       itemMax(rows * cols) {
+            row = new T[itemMax];
+            col = new T[itemMax];
+            val = new T[itemMax];
+            for (int i = 0; i < items; i++) {
+                row[i] = row_in[i];
+                col[i] = col_in[i];
+                val[i] = val_in[i];
+            }
+        }
+
+        void setItems(int a) {
+            Items = a;
+        }
+
+        Matrix<T> Sparse2Norm() {
+            Matrix<T> result(Rows, Cols);
+            for (int i = 0; i < Items; i++)
+                result[row[i]][col[i]] = val[i];
+            return result;
+        }
+
+        void ShowSparseMatrix() {
+            Sparse2Norm().ShowMatrix();
+        }
+
+        SparseMatrix<T> operator=(const SparseMatrix &other) const {
+            if (Rows != other.Rows || Cols != other.Cols)
+                throw "\033[31mSize does not match! Cannot assign value!\033[31m";
+
+            return *this;
+        }
+
+        SparseMatrix<T> operator+(const SparseMatrix &other) const {
+            if (Rows != other.Rows || Cols != other.Cols)
+                throw "\033[31mSize does not match! Cannot assign value!\033[31m";
+            int item = Items + other.Items;
+            SparseMatrix<T> result(Rows, Cols);
+            for (int i = 0; i < Items; i++) {
+                result.row[i] = row[i];
+                result.col[i] = col[i];
+                result.val[i] = val[i];
+            }
+            int index = Items;
+            for (int i = 0; i < other.Items; i++) {
+                for (int j = 0; j < Items; j++) {
+                    if (row[j] == other.row[i] && col[j] == other.col[i]) {
+                        item--;
+                        result.val[j] = val[j] + other.val[i];
+                        break;
+                    } else if (j == Items - 1) {
+                        result.row[index] = other.row[index];
+                        result.col[index] = other.col[index];
+                        result.val[index] = other.val[index];
+                        index++;
+                    }
+
+                }
+            }
+            return result;
+
+        }
+    };
+
 
 };
 
