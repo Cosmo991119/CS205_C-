@@ -88,7 +88,7 @@ namespace MATRIX {//lab9
             for (int i = 0; i < Rows; i++) {
                 cout << "[ ";
                 for (int j = 0; j < Cols; j++) {
-                    cout << Mat[j][i] << " ";
+                    cout << Mat[i][j] << " ";
                 }
                 cout << "]" << endl;
             }
@@ -363,29 +363,37 @@ namespace MATRIX {//lab9
 
         }
 
-        //right_bottom
-        Matrix<T> conv_full(const Matrix<T> &kernal) {
-
-        };
-
         //mid
         Matrix<T> conv_same(const Matrix<T> &kernal) {
             int k_rows=kernal.Rows;
             int k_cols=kernal.Cols;
-            int k_size=kernal.size;
+            //kernal's pos
+            int k_x=(int) k_rows/2+1;
+            int k_y=(int) k_cols/2+1;;
 
+            T ans[Rows][Cols];
 
+            for (int i = 0; i < Rows; i++) {
 
-            for (int i = 0; i < k_cols; ++i) {
+                for (int j = 0; j <Cols; j++) {
+                    //calculate ans
+                    ans[i][j]=0;
+                    for (int k = 0; k < k_rows; k++) {
+                        for (int l = 0; l < k_cols; ++l) {
+                            int p_x=i-(k_x-k);
+                            int p_y=j-(k_y-l);
 
+                            if (p_x<0 || p_x>=Rows || p_y<0||p_y>Cols){
+                                continue;
+                            } else{
+                                ans[i][j]+=Mat[p_x][p_y]*kernal.Mat[k][l];
+                            }
+                        }
+                    }
+                }
             }
 
-            Matrix<T> Output(Rows,Cols,);
-        };
-
-        //left_top
-        Matrix<T> conv_valid(const Matrix<T> &kernal) {
-
+            return Matrix<T>(Rows,Cols,*ans);
         };
 
 
