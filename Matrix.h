@@ -446,6 +446,32 @@ namespace MATRIX {//lab9
             return result;
         }
 
+        Matrix<T> eleWiseMul(const Matrix<T> &other) const {
+            if (Rows != other.Rows || Cols != other.Cols)
+                throw "Size does not match! Cannot element-wize multiply!";
+            Matrix<T> result(Rows, other.Cols);
+            for (int i = 0; i < Rows; i++)
+                for (int j = 0; j < other.Cols; j++)
+                    result.Mat[i][j] = Mat[i][j] * other.Mat[i][j];
+            return result;
+        }
+
+        Matrix<T> operator*(const T k) const {
+            Matrix<T> result(Rows, Cols);
+            for (int i = 0; i < Rows; i++)
+                for (int j = 0; j < Cols; j++)
+                    result.Mat[i][j] = k * result.Mat[i][j];
+            return result;
+        }
+
+        Matrix<T> operator/(const T k) const {
+            Matrix<T> result(Rows, Cols);
+            for (int i = 0; i < Rows; i++)
+                for (int j = 0; j < Cols; j++)
+                    result.Mat[i][j] = result.Mat[i][j] / k;
+            return result;
+        }
+
         Matrix<T> Cross(const Matrix<T> &other) const {
             Matrix<T> result(Rows, other.Cols);
             return result;
