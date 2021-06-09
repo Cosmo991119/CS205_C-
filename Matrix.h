@@ -6,6 +6,7 @@
 #define WSL_MATRIX_H
 
 #include <complex>
+#include <vector>
 
 //structure
 namespace MATRIX {//lab9
@@ -491,9 +492,9 @@ namespace MATRIX {//lab9
             //TODO: more specific
             if (Rows != other.Rows || Cols != other.Cols)
                 throw "\033[31mSize does not match! Cannot assign value!\033[31m";
-            for (int i = 0; i < Rows; i++)
-                for (int j = 0; j < Cols; j++)
-                    Mat[i][j] = other.Mat[i][j];
+//            for (int i = 0; i < Rows; i++)
+//                for (int j = 0; j < Cols; j++)
+//                    Mat[i][j] = other.Mat[i][j];
             //result.ShowMatrix();
             return *this;
         }
@@ -627,10 +628,34 @@ namespace MATRIX {//lab9
             return result;
         }
 
+        void ShowSparseMatrix(){
+            Sparse2Norm().ShowMatrix();
+        }
+
         SparseMatrix<T> operator=(const SparseMatrix & other) const{
-            SparseMatrix<T> result(Rows,Cols,Items,row,col,val);
+            if (Rows != other.Rows || Cols != other.Cols)
+                throw "\033[31mSize does not match! Cannot assign value!\033[31m";
+            return *this;
+        }
+
+        SparseMatrix<T> operator+(const SparseMatrix & other) const{
+            if (Rows != other.Rows || Cols != other.Cols)
+                throw "\033[31mSize does not match! Cannot assign value!\033[31m";
+            int item=Items+other.Items;
+//            row = new T[item];
+//            col = new T[item];
+//            val = new T[item];
+
+            for(int i=0;i<Items;i++)
+                for(int j=0;j<other.Items;j++)
+                    if(row[i]==other.row[j] && col[i] ==other.col[j])
+                        item--;
+
+            SparseMatrix<T> result(Rows,Cols,item);
+            for(int i=0;i<item;i++)
+                result[row[i]][col[i]] = val[i];
             return result;
-            //return *this;
+
         }
     };
 
