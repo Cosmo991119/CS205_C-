@@ -232,7 +232,12 @@ namespace MATRIX {//lab9
         }
 
 
-        T EigenValue();
+        T EigenValue(){
+            if (Cols!=Rows) {
+                throw "\033[31mSize Error: \033[0mthe matrixs must has same size.";//need to do throw exception
+            }
+
+        }
 
         T EigenVector();//vector
 
