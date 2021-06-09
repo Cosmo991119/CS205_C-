@@ -491,9 +491,9 @@ namespace MATRIX {//lab9
             //TODO: more specific
             if (Rows != other.Rows || Cols != other.Cols)
                 throw "\033[31mSize does not match! Cannot assign value!\033[31m";
-//            for (int i = 0; i < Rows; i++)
-//                for (int j = 0; j < Cols; j++)
-//                    Mat[i][j] = other.Mat[i][j];
+            for (int i = 0; i < Rows; i++)
+                for (int j = 0; j < Cols; j++)
+                    Mat[i][j] = other.Mat[i][j];
             //result.ShowMatrix();
             return *this;
         }
@@ -611,7 +611,7 @@ namespace MATRIX {//lab9
         }
 
         SparseMatrix(int rows, int cols, int items, T *row_in, T *col_in, T *val_in) : Rows(rows), Cols(cols),
-                                                                                       Items(items), ,
+                                                                                       Items(items),
                                                                                        itemMax(rows * cols) {
             row = new T[itemMax];
             col = new T[itemMax];
@@ -641,6 +641,7 @@ namespace MATRIX {//lab9
         SparseMatrix<T> operator=(const SparseMatrix &other) const {
             if (Rows != other.Rows || Cols != other.Cols)
                 throw "\033[31mSize does not match! Cannot assign value!\033[31m";
+
             return *this;
         }
 
