@@ -588,6 +588,53 @@ namespace MATRIX {//lab9
 
     };
 
+    template <typename T>
+    class SparseMatrix{
+    private:
+        int Rows;
+        int Cols;
+        int Items;
+        T * row;
+        T * col;
+        T * val;
+    public:
+        SparseMatrix(int rows, int cols,int items):Rows(rows),Cols(cols),Items(items){
+            T a;
+            row = new T[items];
+            col = new T[items];
+            val = new T[items];
+            for(int i=0;i<items;i++){
+                row[i] = a;
+                col[i] = a;
+                val[i] = a;
+            }
+        }
+        SparseMatrix(int rows, int cols,int items, T * row_in,T * col_in,T * val_in):Rows(rows),Cols(cols),Items(items){
+            row = new T[items];
+            col = new T[items];
+            val = new T[items];
+            for(int i=0;i<items;i++){
+                row[i] = row_in[i];
+                col[i] = col_in[i];
+                val[i] = val_in[i];
+            }
+        }
+
+        Matrix<T> Sparse2Norm(){
+            Matrix<T> result(Rows,Cols);
+            for(int i=0;i<Items;i++)
+                result[row[i]][col[i]] = val[i];
+            return result;
+        }
+
+        SparseMatrix<T> operator=(const SparseMatrix & other) const{
+            SparseMatrix<T> result(Rows,Cols,Items,row,col,val);
+            return result;
+            //return *this;
+        }
+    };
+
+
 };
 
 #endif //WSL_MATRIX_H
