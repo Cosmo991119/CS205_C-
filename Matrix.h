@@ -404,6 +404,87 @@ namespace MATRIX {//lab9
             return Matrix<T>(Rows,Cols,*ans);
         };
 
+        //[a,b:c,d] not include d,b
+        Matrix<T> slice(int a,int b,int c,int d){
+            if (a>=b||c>=d || a<0||b>=Rows||c<0||d>=Cols){
+                throw "\033[31mSlice Error!\033[31m";
+            }
+
+            T ans[b-a][d-c];
+            for (int i = 0; i < b-a; i++) {
+                for (int j = 0; j < c-d; j++) {
+                    ans[i][j]=Mat[a+i][c+j];
+                }
+            }
+
+            return Matrix<T>(b-a,c-d,*ans);
+        }
+
+        //[a,b:]
+        Matrix<T> slice(int a,int b,int type){
+            if (a>=b){
+                throw "\033[31mSlice Error!\033[31m";
+            }
+
+            if (type==-1){
+                if (a<0||b>=Rows){
+                    throw "\033[31mSlice Error!\033[31m";
+                }
+                T ans[b-a][Cols];
+                for (int i = 0; i < b-a; i++) {
+                    for (int j = 0; j < Cols; j++) {
+                        ans[i][j]=Mat[a+i][j];
+                    }
+                }
+
+                return Matrix<T>(b-a,Cols,*ans);
+
+            } else if (type==-2){
+                if (a<0||b>=Cols){
+                    throw "\033[31mSlice Error!\033[31m";
+                }
+                T ans[Rows][b-a];
+                for (int i = 0; i < Rows; i++) {
+                    for (int j = 0; j < b-a; j++) {
+                        ans[i][j]=Mat[i][a+j];
+                    }
+                }
+
+                return Matrix<T>(Rows,b-a,*ans);
+            }
+        }
+
+//        //[a,:]
+
+//        Matrix<T> slice(int a,int type){
+//
+//
+//            if (type==-1){
+//                if (a<=-Rows || a>=Rows){
+//                    throw "\033[31mSlice Error!\033[31m";
+//                }
+//                int row_size=a;
+//
+//                for (int i = 0; i < b-a+1; i++) {
+//                    for (int j = 0; j < Cols; j++) {
+//                        ans[i][j]=Mat[a+i][j];
+//                    }
+//                }
+//
+//                return Matrix<T>(b-a+1,Cols,*ans);
+//
+//            } else if (type==-2){
+//                T ans[Rows][b-a+1];
+//                for (int i = 0; i < Rows; i++) {
+//                    for (int j = 0; j < b-a+1; j++) {
+//                        ans[i][j]=Mat[i][a+j];
+//                    }
+//                }
+//
+//                return Matrix<T>(Rows,b-a+1,*ans);
+//            }i
+//        }
+
 
         //居然要重写等号，虽然我不知道为什么，不写赋值就会有问题。
         Matrix<T> operator=(const Matrix<T> &other) const {
