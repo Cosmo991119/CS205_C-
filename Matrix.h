@@ -7,6 +7,8 @@
 
 #include <complex>
 //opencv
+#include <math.h>
+#include <limits>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <vector>
@@ -488,8 +490,10 @@ namespace MATRIX {//lab9
 //            }i
 //        }
 
-            //openCV
-//            Mat
+        //openCV
+//        Mat matrix2Mat() {
+//
+//        }
 
 
         //居然要重写等号，虽然我不知道为什么，不写赋值就会有问题。
