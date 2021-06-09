@@ -509,6 +509,57 @@ namespace MATRIX {//lab9
             return img;
         }
 
+        //mat to matrixs
+        Matrix<T> Mat2Vec(string pic)//read pic
+        {
+            Mat img = imread(pic,0);
+            if (img.empty()){
+                throw "\033[31mRead Picture Failed!\033[31m";
+            }
+
+
+            uchar **array = new uchar*[img.rows];
+            for (int i = 0; i<img.rows; i++)
+                array[i] = new uchar[img.cols];
+
+            uchar *ptmp = NULL;
+
+            for (int i = 0; i < img.rows; i++)
+            {
+                for (int j = 0; j < img.cols; j++)
+                {
+                    array[i][j] = img.at<uchar>(i, j);
+                }
+            }
+
+            return array;
+        }
+
+        Matrix<T> Mat2Vec(Mat img)//input Mat
+        {
+//            Mat img = imread(pic,0);
+            if (img.empty()){
+                throw "\033[31mRead Picture Failed!\033[31m";
+            }
+
+
+            uchar **array = new uchar*[img.rows];
+            for (int i = 0; i<img.rows; i++)
+                array[i] = new uchar[img.cols];
+
+            uchar *ptmp = NULL;
+
+            for (int i = 0; i < img.rows; i++)
+            {
+                for (int j = 0; j < img.cols; j++)
+                {
+                    array[i][j] = img.at<uchar>(i, j);
+                }
+            }
+
+            return array;
+        }
+
 
         //居然要重写等号，虽然我不知道为什么，不写赋值就会有问题。
         Matrix<T> operator=(const Matrix<T> &other) const {
