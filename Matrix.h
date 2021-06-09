@@ -6,6 +6,9 @@
 #define WSL_MATRIX_H
 
 #include <complex>
+//opencv
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 //structure
 namespace MATRIX {//lab9
@@ -476,6 +479,9 @@ namespace MATRIX {//lab9
 //                return Matrix<T>(Rows,b-a+1,*ans);
 //            }i
 //        }
+
+            //openCV
+            Mat
 
 
         //居然要重写等号，虽然我不知道为什么，不写赋值就会有问题。
