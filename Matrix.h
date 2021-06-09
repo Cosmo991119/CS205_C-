@@ -10,43 +10,6 @@
 //structure
 namespace MATRIX {//lab9
     using namespace std;
-//
-//    //exception
-//    class SizeErrorException : exception {
-//        string e;
-//    public:
-//        SizeErrorException(string msg) {
-//            e = msg;
-//        };
-//
-//        const char *what() const noexcept override {
-//            return e.data();
-//        }
-//    };
-//
-//    class SquareErrorException : exception {
-//        string e;
-//    public:
-//        SquareErrorException(string msg) {
-//            e = msg;
-//        };
-//
-//        const char *what() const noexcept override {
-//            return e.data();
-//        }
-//    };
-//
-//    class IreversibleException : exception {
-//        string e;
-//    public:
-//        IreversibleException(string msg) {
-//            e = msg;
-//        };
-//
-//        const char *what() const noexcept override {
-//            return e.data();
-//        }
-//    };
 
 
     template<typename T>
@@ -125,7 +88,7 @@ namespace MATRIX {//lab9
             for (int i = 0; i < Rows; i++) {
                 cout << "[ ";
                 for (int j = 0; j < Cols; j++) {
-                    cout << Mat[i][j] << " ";
+                    cout << Mat[j][i] << " ";
                 }
                 cout << "]" << endl;
             }
@@ -148,7 +111,7 @@ namespace MATRIX {//lab9
         T *GetColum(int col) {
             T *arr[Rows];
             for (int i = 0; i < Rows; ++i) {
-                arr[i] = Mat[col][1];
+                arr[i] = Mat[col][i];
             }
             return arr;
         };
@@ -297,10 +260,10 @@ namespace MATRIX {//lab9
                 return Matrix(1, 1, ans);
             } else if (Cols == 2) {//2*2
                 int **ans[2][2];
-                ans[0][0] = (1 / Det(Mat, Cols)) * Mat[1][1];
-                ans[1][1] = (1 / Det(Mat, Cols)) * Mat[0][0];
-                ans[0][1] = (-1 / Det(Mat, Cols)) * Mat[0][1];
-                ans[1][0] = (-1 / Det(Mat, Cols)) * Mat[1][0];
+                ans[0][0] = Mat[1][1]/ this->Det();
+                ans[1][1] = Mat[0][0]/ this->Det();
+                ans[0][1] = -Mat[0][1]/ this->Det();
+                ans[1][0] = -Mat[1][0]/ this->Det();
                 return Matrix(2, 2, ans);
             } else {//
                 //Inverted triangle
@@ -400,9 +363,31 @@ namespace MATRIX {//lab9
 
         }
 
-        Matrix<T> convlve() {
+        //right_bottom
+        Matrix<T> conv_full(const Matrix<T> &kernal) {
 
         };
+
+        //mid
+        Matrix<T> conv_same(const Matrix<T> &kernal) {
+            int k_rows=kernal.Rows;
+            int k_cols=kernal.Cols;
+            int k_size=kernal.size;
+
+
+
+            for (int i = 0; i < k_cols; ++i) {
+
+            }
+
+            Matrix<T> Output(Rows,Cols,);
+        };
+
+        //left_top
+        Matrix<T> conv_valid(const Matrix<T> &kernal) {
+
+        };
+
 
         //居然要重写等号，虽然我不知道为什么，不写赋值就会有问题。
         Matrix<T> operator=(const Matrix<T> &other) const {
