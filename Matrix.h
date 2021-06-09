@@ -233,14 +233,14 @@ namespace MATRIX {//lab9
         }
 
 
-        T EigenValue() {
-            if (Cols != Rows)
-                throw "\033[31mSize Error: \033[0mThe matrix is not square matrix!";//need to do throw exception
-            if (Det() == 0)
-                throw "Cannot use QR method. Not a Full-rank Matrix!"
-
-
-        }
+//        T EigenValue() {
+//            if (Cols != Rows)
+//                throw "\033[31mSize Error: \033[0mThe matrix is not square matrix!";//need to do throw exception
+//            if (Det() == 0)
+//                throw "Cannot use QR method. Not a Full-rank Matrix!"
+//
+//
+//        }
 
         T EigenVector();//vector
 
