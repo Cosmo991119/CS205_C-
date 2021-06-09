@@ -502,7 +502,7 @@ namespace MATRIX {//lab9
 
         //居然要重写等号，虽然我不知道为什么，不写赋值就会有问题。
         Matrix<T> operator=(const Matrix<T> &other) const {
-
+            //TODO: more specific
             if (Rows != other.Rows || Cols != other.Cols)
                 throw "\033[31mSize does not match! Cannot assign value!\033[31m";
             for (int i = 0; i < Rows; i++)
@@ -553,7 +553,7 @@ namespace MATRIX {//lab9
 
         Matrix<T> eleWiseMul(const Matrix<T> &other) const {
             if (Rows != other.Rows || Cols != other.Cols)
-                throw "Size does not match! Cannot element-wize multiply!";
+                throw "\033[31mSize does not match! Cannot element-wize multiply!\033[31m";
             Matrix<T> result(Rows, other.Cols);
             for (int i = 0; i < Rows; i++)
                 for (int j = 0; j < other.Cols; j++)
@@ -577,8 +577,25 @@ namespace MATRIX {//lab9
             return result;
         }
 
-        Matrix<T> Cross(const Matrix<T> &other) const {
-            Matrix<T> result(Rows, other.Cols);
+        Matrix<T> CrossRow(const Matrix<T> &other) const {//行向量乘行向量,返回3维向量
+            if(Rows!=1 || other.Rows != 1)
+                throw "Not vectors! Cannot done cross product";
+            Matrix<T> result(1, 3);
+            if(Cols==1) {
+                result.Mat[0][0]=0;
+                result.Mat[0][1]=0;
+                result.Mat[0][2]=0;
+            }
+            else if(Cols==2){
+                result.Mat[0][0]=0;
+                result.Mat[0][0]=0;
+                result.Mat[0][0]=Mat[0][0]*other.Mat[0][1]-Mat[0][1]*other.Mat[0][0];
+            }
+            else if (Cols==3){
+                result.Mat[0][0]=Mat[0][1]*other.Mat[0][2]-Mat[0][2]*other.Mat[0][1];
+                result.Mat[0][0]=Mat[0][2]*other.Mat[0][0]-Mat[0][0]*other.Mat[0][2];
+                result.Mat[0][0]=Mat[0][0]*other.Mat[0][1]-Mat[0][1]*other.Mat[0][0];
+            }
             return result;
         }
 
