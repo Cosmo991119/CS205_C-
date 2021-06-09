@@ -10,43 +10,6 @@
 //structure
 namespace MATRIX {//lab9
     using namespace std;
-//
-//    //exception
-//    class SizeErrorException : exception {
-//        string e;
-//    public:
-//        SizeErrorException(string msg) {
-//            e = msg;
-//        };
-//
-//        const char *what() const noexcept override {
-//            return e.data();
-//        }
-//    };
-//
-//    class SquareErrorException : exception {
-//        string e;
-//    public:
-//        SquareErrorException(string msg) {
-//            e = msg;
-//        };
-//
-//        const char *what() const noexcept override {
-//            return e.data();
-//        }
-//    };
-//
-//    class IreversibleException : exception {
-//        string e;
-//    public:
-//        IreversibleException(string msg) {
-//            e = msg;
-//        };
-//
-//        const char *what() const noexcept override {
-//            return e.data();
-//        }
-//    };
 
 
     template<typename T>
@@ -148,7 +111,7 @@ namespace MATRIX {//lab9
         T *GetColum(int col) {
             T *arr[Rows];
             for (int i = 0; i < Rows; ++i) {
-                arr[i] = Mat[col][1];
+                arr[i] = Mat[col][i];
             }
             return arr;
         };
@@ -287,8 +250,8 @@ namespace MATRIX {//lab9
         //Gauss-Jordan Elimination Method
         Matrix<T> inverse() {
             if (Cols != Rows) {
-                throw SquareErrorException(
-                        "\033[31msquare Error: \033[0mthe matrixs must be a square matrix.");//need to do throw exception
+                throw
+                        "\033[31msquare Error: \033[0mthe matrixs must be a square matrix.";
             }
 
             if (Cols == 1) {//1*1
@@ -297,10 +260,10 @@ namespace MATRIX {//lab9
                 return Matrix(1, 1, ans);
             } else if (Cols == 2) {//2*2
                 int **ans[2][2];
-                ans[0][0] = (1 / Det(Mat, Cols)) * Mat[1][1];
-                ans[1][1] = (1 / Det(Mat, Cols)) * Mat[0][0];
-                ans[0][1] = (-1 / Det(Mat, Cols)) * Mat[0][1];
-                ans[1][0] = (-1 / Det(Mat, Cols)) * Mat[1][0];
+                ans[0][0] = Mat[1][1]/ this->Det();
+                ans[1][1] = Mat[0][0]/ this->Det();
+                ans[0][1] = -Mat[0][1]/ this->Det();
+                ans[1][0] = -Mat[1][0]/ this->Det();
                 return Matrix(2, 2, ans);
             } else {//
                 //Inverted triangle
@@ -322,8 +285,8 @@ namespace MATRIX {//lab9
                 }
 
 
-                for (int i = 0; i < Cols; i++) {
-                    int privot = 1;
+                for (int i = 0; i < Rows; i++) {
+                    int privot = i;
                     T max = t[i][i];
                     if (max < 0)
                         max = -max;
@@ -342,119 +305,12 @@ namespace MATRIX {//lab9
 
                     //can't inverse
                     if (max == 0) {
-                        throw IreversibleException(
-                                "\033[31mIrreversible Error: \033[0mthe matrixs is  irreversible.");
+                        throw "\033[31mIrreversible Error: \033[0mthe matrixs is  irreversible.";
                     }
 
                     //change two rows
                     if (privot != i) {
-                        for (int k = 0; k < Cols; k++) {
-                            T tmp;
-                            tmp = t[i][k];
-                            t[i][k] = t[privot][k];
-                            t[privot][k] = tmp;
-
-                            T Inv;
-                            Inv = IMatrix[i][k];
-                            IMatrix[i][k] = IMatrix[privot][k];
-                            IMatrix[privot][k] = Inv;
-                        }
-                    }
-
-                    //make mat[i][i] be 1,others 0
-                    for (int j = i + 1; j < Rows; j++) {
-                        T f = t[j][i] / t[i][i];
-
                         for (int k = 0; k < Rows; k++) {
-                            t[j][k] -= t[i][k] * f;
-                            IMatrix[j][k] -= IMatrix[i][k] * f;
-
-                        }
-                    }
-                }
-
-                for (int i = Rows - 1; i >= 0; i--) {
-                    T f = t[i][i];
-                    if (f == 0) {
-                        throw IreversibleException(
-                                "\033[31mIrreversible Error: \033[0mthe matrixs is  irreversible.");
-                    }
-
-                    for (int j = 0; j < i; j++) {
-                        t[]
-                    }
-
-                }
-            }
-
-
-        }
-
-        //Gauss-Jordan Elimination Method
-        Matrix<T> inverse() {
-            if (Cols != Rows) {
-                throw SquareErrorException(
-                        "\033[31msquare Error: \033[0mthe matrixs must be a square matrix.");//need to do throw exception
-            }
-
-            if (Cols == 1) {//1*1
-                int *ans[1];
-                ans[0] = 1 / Mat[0][0];
-                return Matrix(1, 1, ans);
-            } else if (Cols == 2) {//2*2
-                int **ans[2][2];
-                ans[0][0] = (1 / Det(Mat, Cols)) * Mat[1][1];
-                ans[1][1] = (1 / Det(Mat, Cols)) * Mat[0][0];
-                ans[0][1] = (-1 / Det(Mat, Cols)) * Mat[0][1];
-                ans[1][0] = (-1 / Det(Mat, Cols)) * Mat[1][0];
-                return Matrix(2, 2, ans);
-            } else {//
-                //Inverted triangle
-                T **IMatrix = new T *[Rows];
-                T **t = new T *[Rows];
-
-                for (int i = 0; i < Rows; i++) {
-                    t[i] = new T[Rows];
-                    IMatrix[i] = new T[Rows];
-
-                    for (int j = 0; j < Cols; j++) {
-                        t[i][j] = Mat[i][j];
-
-                        if (i == j)
-                            IMatrix[i][j] = 1;
-                        else
-                            IMatrix[i][j] = 0;
-                    }
-                }
-
-
-                for (int i = 0; i < Cols; i++) {
-                    int privot = 1;
-                    T max = t[i][i];
-                    if (max < 0)
-                        max = -max;
-
-
-                    for (int j = i + 1; j < Rows; j++) {
-                        T tmp = t[j][j];
-                        if (tmp < 0)
-                            tmp = -tmp;//abs
-
-                        if (max < tmp) {
-                            max = tmp;
-                            privot = j;
-                        }
-                    }
-
-                    //can't inverse
-                    if (max == 0) {
-                        throw IreversibleException(
-                                "\033[31mIrreversible Error: \033[0mthe matrixs is  irreversible.");
-                    }
-
-                    //change two rows
-                    if (privot != i) {
-                        for (int k = 0; k < Cols; k++) {
                             T tmp;
                             tmp = t[i][k];
                             t[i][k] = t[privot][k];
@@ -486,19 +342,60 @@ namespace MATRIX {//lab9
                                 "\033[31mIrreversible Error: \033[0mthe matrixs is  irreversible.";
                     }
 
+                    for (int j = 0; j < Rows; j++) {
+                        t[i][j]/=f;
+                        IMatrix[i][j]/=f;
+                    }
+
                     for (int j = 0; j < i; j++) {
-                        t[]
+                        T m = t[j][i];
+                        for (int k = 0; k < Rows; k++) {
+                            t[j][k]-=m*t[i][k];
+                            IMatrix[j][k]-=m*IMatrix[i][k];
+                        }
                     }
 
                 }
+
+                return IMatrix;
             }
 
 
         }
 
-        Matrix<T> convlve() {
+        //mid
+        Matrix<T> conv_same(const Matrix<T> &kernal) {
+            int k_rows=kernal.Rows;
+            int k_cols=kernal.Cols;
+            //kernal's pos
+            int k_x=(int) k_rows/2+1;
+            int k_y=(int) k_cols/2+1;;
 
+            T ans[Rows][Cols];
+
+            for (int i = 0; i < Rows; i++) {
+
+                for (int j = 0; j <Cols; j++) {
+                    //calculate ans
+                    ans[i][j]=0;
+                    for (int k = 0; k < k_rows; k++) {
+                        for (int l = 0; l < k_cols; ++l) {
+                            int p_x=i-(k_x-k);
+                            int p_y=j-(k_y-l);
+
+                            if (p_x<0 || p_x>=Rows || p_y<0||p_y>Cols){
+                                continue;
+                            } else{
+                                ans[i][j]+=Mat[p_x][p_y]*kernal.Mat[k][l];
+                            }
+                        }
+                    }
+                }
+            }
+
+            return Matrix<T>(Rows,Cols,*ans);
         };
+
 
         //居然要重写等号，虽然我不知道为什么，不写赋值就会有问题。
         Matrix<T> operator=(const Matrix<T> &other) const {
@@ -599,19 +496,6 @@ namespace MATRIX {//lab9
             return result;
         }
 
-
-/*编译会报错我先注释掉了
-//*/
-
-//        void show() {
-//            for (int i = 0; i < Rows; i++) {
-//                std::cout << "[ ";
-//                for (int j = 0; j < Cols; j++) {
-//                    std::cout << Mat[i][j] << ' ';
-//                }
-//                std::cout << "]" << std::endl;
-//            }
-//        } we have showMatrix() function
 
     };
 
