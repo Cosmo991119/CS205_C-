@@ -7,7 +7,6 @@
 
 #include <complex>
 //opencv
-#include <math.h>
 #include <limits>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -30,7 +29,7 @@ namespace MATRIX {//lab9
     public:
         //hbx：我直接改了，先rows再cols
         Matrix(int rows, int cols) : Rows(rows), Cols(cols), size(rows * cols) {
-            T a='\0';
+            T a = '\0';
             Matrixs = new T *[rows];
             for (int i = 0; i < rows; i++) {
                 Matrixs[i] = new T[cols];
@@ -186,7 +185,7 @@ namespace MATRIX {//lab9
 
         T trace() {
             if (Cols != Rows)
-                throw "\033[31msquare Error: \033[0mthe matrixs must be a square matrix.";
+                throw runtime_error("\033[31msquare Error: \033[0mthe matrixs must be a square matrix.");
             T TRACE;
             for (int i = 0; i < Rows; i++)
                 TRACE += Matrixs[i][i];
@@ -227,7 +226,7 @@ namespace MATRIX {//lab9
 
         T Det() {
             if (Cols != Rows)
-                throw "\033[31msquare Error: \033[0mthe matrixs must be a square matrix.";
+                throw runtime_error("\033[31msquare Error: \033[0mthe matrixs must be a square matrix.");
             T det_val;
             //Matrix<T> mat_mid(Rows,Cols);
             if (Rows == 2)
@@ -255,7 +254,8 @@ namespace MATRIX {//lab9
         //advanced operator implement
         void reshape(int cols, int rows) {
             if (cols * rows != Cols * Rows) {
-                throw "\033[31mSize Error: \033[0mthe matrixs must has same size.";//need to do throw exception
+                throw runtime_error(
+                        "\033[31mSize Error: \033[0mthe matrixs must has same size.");//need to do throw exception
             }
 
             Cols = cols;
@@ -316,7 +316,7 @@ namespace MATRIX {//lab9
 
                     //can't inverse
                     if (max == 0) {
-                        throw "\033[31mIrreversible Error: \033[0mthe matrixs is  irreversible.";
+                        throw runtime_error("\033[31mIrreversible Error: \033[0mthe matrixs is  irreversible.");
                     }
 
                     //change two rows
@@ -349,8 +349,7 @@ namespace MATRIX {//lab9
                 for (int i = Rows - 1; i >= 0; i--) {
                     T f = t[i][i];
                     if (f == 0) {
-                        throw
-                                "\033[31mIrreversible Error: \033[0mthe matrixs is  irreversible.";
+                        throw runtime_error("\033[31mIrreversible Error: \033[0mthe matrixs is  irreversible.");
                     }
 
                     for (int j = 0; j < Rows; j++) {
@@ -374,26 +373,21 @@ namespace MATRIX {//lab9
         }
 
         //mid
-        Matrix<T>  conv_same(const Matrix<T> &kernal) {
+        Matrix<T> conv_same(const Matrix<T> &kernal) {
             int k_rows = kernal.Rows;
             int k_cols = kernal.Cols;
             //kernal's pos
             int k_x = (int) k_rows / 2;
             int k_y = (int) k_cols / 2;
-//
-//            T ans[Rows][Cols];
 
+            T **convthesame = new T *[Rows];
 
-
-            T **ans = new T *[Rows];
-//
             for (int i = 0; i < Rows; i++) {
-                ans[i] = new T[Cols];
-//                for (int j = 0; j < Cols; j++) {
-//                    ans[i][j] = '\0';
-//
-//                }
+                convthesame[i] = new T[Cols];
 
+                for (int j = 0; j < Cols; j++) {
+                    convthesame[i][j] = '\0';
+                }
             }
 
 
@@ -401,16 +395,15 @@ namespace MATRIX {//lab9
 
                 for (int j = 0; j < Cols; j++) {
                     //calculate ans
-                    ans[i][j] = '\0';
                     for (int k = 0; k < k_rows; k++) {
                         for (int l = 0; l < k_cols; l++) {
                             int p_x = i - (k_x - k);
                             int p_y = j - (k_y - l);
 
-                            if (p_x < 0 || p_x >= Rows || p_y < 0 || p_y > Cols) {
+                            if (p_x < 0 || p_x >= Rows || p_y < 0 || p_y >= Cols) {
                                 continue;
                             } else {
-                                ans[i][j] += Matrixs[p_x][p_y] * kernal.Matrixs[k][l];
+                                convthesame[i][j] += Matrixs[p_x][p_y] * kernal.Matrixs[k][l];
                             }
                         }
                     }
@@ -420,7 +413,7 @@ namespace MATRIX {//lab9
 //            Matrix<T> convSameMode(Rows, Cols, *ans);
 //            convSameMode.ShowMatrix();
 
-            return Matrix(Rows, Cols, ans);
+            return Matrix<T>(Rows, Cols, convthesame);
 
         };
 
@@ -428,7 +421,7 @@ namespace MATRIX {//lab9
         //[a,b:c,d] not include d,b
         Matrix<T> slice(int a, int b, int c, int d) {
             if (a >= b || c >= d || a < 0 || b > Rows || c < 0 || d > Cols) {
-                throw "\033[31mSlice Error!\033[31m";
+                throw runtime_error("\033[31mSlice Error!\033[31m");
             }
 
 //            T ans[b - a][d - c];
@@ -462,14 +455,14 @@ namespace MATRIX {//lab9
         //[a,b:]
         Matrix<T> slice(int a, int b, int type) {
             if (a >= b) {
-                throw "\033[31mSlice Error!\033[31m";
+                throw runtime_error("\033[31mSlice Error!\033[31m");
             }
 
             int ans_size = b - a;
 
             if (type == -1) {
                 if (a < 0 || b > Rows) {
-                    throw "\033[31mSlice Error!\033[31m";
+                    throw runtime_error("\033[31mSlice Error!\033[31m");
                 }
 
                 T **ans_slic = new T *[ans_size];
@@ -493,7 +486,7 @@ namespace MATRIX {//lab9
 
             } else if (type == -2) {
                 if (a < 0 || b > Cols) {
-                    throw "\033[31mSlice Error!\033[31m";
+                    throw runtime_error("\033[31mSlice Error!\033[31m");
                 }
 
                 T **ans_type = new T *[Rows];
@@ -515,8 +508,8 @@ namespace MATRIX {//lab9
                 }
 
                 return Matrix<T>(Rows, ans_size, ans_type);
-            }else  {
-                throw "\033[31mSlice Type Error!\033[31m";
+            } else {
+                throw runtime_error("\033[31mSlice Type Error!\033[31m");
             }
         }
 
@@ -557,7 +550,7 @@ namespace MATRIX {//lab9
         Mat Vec2Mat() {
 
             Mat img(Rows, Cols, CV_8UC1);
-            uchar *ptmp = NULL;
+            uchar *ptmp = nullptr;
             for (int i = 0; i < Rows; ++i) {
                 ptmp = img.ptr<uchar>(i);
 
@@ -570,58 +563,18 @@ namespace MATRIX {//lab9
         }
 
         //mat to matrixs
-        Matrix<T> Mat2Vec(string pic)//read pic
-        {
-            Mat img = imread(pic, 0);
-            if (img.empty()) {
-                throw "\033[31mRead Picture Failed!\033[31m";
-            }
 
 
-            uchar **array = new uchar *[img.rows];
-            for (int i = 0; i < img.rows; i++)
-                array[i] = new uchar[img.cols];
-
-            uchar *ptmp = NULL;
-
-            for (int i = 0; i < img.rows; i++) {
-                for (int j = 0; j < img.cols; j++) {
-                    array[i][j] = img.at<uchar>(i, j);
-                }
-            }
-
-            return array;
-        }
-
-        Matrix<T> Mat2Vec(Mat img)//input Mat
-        {
-//            Mat img = imread(pic,0);
-            if (img.empty()) {
-                throw "\033[31mRead Picture Failed!\033[31m";
-            }
-
-
-            uchar **array = new uchar *[img.rows];
-            for (int i = 0; i < img.rows; i++)
-                array[i] = new uchar[img.cols];
-
-            uchar *ptmp = NULL;
-
-            for (int i = 0; i < img.rows; i++) {
-                for (int j = 0; j < img.cols; j++) {
-                    array[i][j] = img.at<uchar>(i, j);
-                }
-            }
-
-            return array;
-        }
 
 
         //居然要重写等号，虽然我不知道为什么，不写赋值就会有问题。
-        Matrix<T> operator=(const Matrix<T> &other) const {
+        Matrix<T> &operator=(const Matrix<T> &other) {
+            if (&other == this) {
+                return *this;
+            }
             //TODO: more specific
             if (Rows != other.Rows || Cols != other.Cols)
-                throw "\033[31mSize does not match! Cannot assign value!\033[31m";
+                throw runtime_error("\033[31mSize does not match! Cannot assign value!\033[31m");
             for (int i = 0; i < Rows; i++)
                 for (int j = 0; j < Cols; j++)
                     Matrixs[i][j] = other.Matrixs[i][j];
@@ -631,7 +584,7 @@ namespace MATRIX {//lab9
 
         Matrix<T> operator+(const Matrix<T> &other) const {
             if (Rows != other.Rows || Cols != other.Cols)
-                throw "\033[31mSize does not match! Cannot plus!\033[31m";
+                throw runtime_error("\033[31mSize does not match! Cannot plus!\033[31m");
             Matrix<T> result(Rows, Cols);//constructor反了，搞到这里直接转置了hhh
             for (int i = 0; i < Rows; i++)
                 for (int j = 0; j < Cols; j++)
@@ -642,7 +595,7 @@ namespace MATRIX {//lab9
 
         Matrix<T> operator-(const Matrix<T> &other) const {
             if (Rows != other.Rows || Cols != other.Cols)
-                throw "\033[31mSize does not match! Cannot minus!\033[31m";
+                throw runtime_error("\033[31mSize does not match! Cannot minus!\033[31m");
             Matrix<T> result(Rows, Cols);
             for (int i = 0; i < Rows; i++)
                 for (int j = 0; j < Cols; j++)
@@ -654,7 +607,7 @@ namespace MATRIX {//lab9
 
         Matrix<T> operator*(const Matrix<T> &other) const {
             if (Rows != other.Cols || Cols != other.Rows)
-                throw "\033[31mSize does not match! Cannot multiply!\033[31m";
+                throw runtime_error("\033[31mSize does not match! Cannot multiply!\033[31m");
             Matrix<T> result(Rows, other.Cols);
             for (int i = 0; i < Rows; i++)
                 for (int j = 0; j < other.Cols; j++)
@@ -670,7 +623,7 @@ namespace MATRIX {//lab9
 
         Matrix<T> eleWiseMul(const Matrix<T> &other) const {
             if (Rows != other.Rows || Cols != other.Cols)
-                throw "\033[31mSize does not match! Cannot element-wize multiply!\033[31m";
+                throw runtime_error("\033[31mSize does not match! Cannot element-wize multiply!\033[31m");
             Matrix<T> result(Rows, other.Cols);
             for (int i = 0; i < Rows; i++)
                 for (int j = 0; j < other.Cols; j++)
@@ -696,7 +649,7 @@ namespace MATRIX {//lab9
 
         Matrix<T> CrossRow(const Matrix<T> &other) const {//行向量乘行向量,返回3维向量
             if (Rows != 1 || other.Rows != 1)
-                throw "Not vectors! Cannot done cross product";
+                throw runtime_error("Not vectors! Cannot done cross product");
             Matrix<T> result(1, 3);
             if (Cols == 1) {
                 result.Matrixs[0][0] = 0;
@@ -716,6 +669,58 @@ namespace MATRIX {//lab9
 
 
     };
+
+    Matrix<uchar> Mat2Vec(const string& pic)//read pic
+    {
+        Mat img = imread(pic, 0);
+        if (img.empty()) {
+            throw runtime_error("\033[31mRead Picture Failed!\033[31m");
+        }
+
+//        int arr[img.rows][img.cols];
+
+        uchar **array = new uchar *[img.rows];
+        for (int i = 0; i < img.rows; i++)
+            array[i] = new uchar[img.cols];
+
+        uchar *ptmp = nullptr;
+
+        for (int i = 0; i < img.rows; i++) {
+            for (int j = 0; j < img.cols; j++) {
+                array[i][j] = img.at<uchar>(i, j);
+            }
+        }
+
+        Matrix<uchar> Vec(img.rows,img.cols,array);
+        Vec.ShowMatrix();
+        return Vec;
+    }
+
+
+    Matrix<uchar> Mat2Vec(Mat img)//input Mat
+    {
+//            Mat img = imread(pic,0);
+        if (img.empty()) {
+            throw runtime_error("\033[31mRead Picture Failed!\033[31m");
+        }
+
+
+        uchar **array = new uchar *[img.rows];
+        for (int i = 0; i < img.rows; i++)
+            array[i] = new uchar[img.cols];
+
+        uchar *ptmp = NULL;
+
+        for (int i = 0; i < img.rows; i++) {
+            for (int j = 0; j < img.cols; j++) {
+                array[i][j] = img.at<uchar>(i, j);
+            }
+        }
+        Matrix<uchar> Vec2(img.rows,img.cols,array);
+//        Vec2.ShowMatrix();
+
+        return Vec2;
+    }
 
     template<typename T>
     class SparseMatrix {
@@ -777,9 +782,12 @@ namespace MATRIX {//lab9
             Sparse2Norm().ShowMatrix();
         }
 
-        SparseMatrix<T> operator=(const SparseMatrix &other) {
+        SparseMatrix<T> &operator=(const SparseMatrix &other) {
+            if (&other == this) {
+                return *this;
+            }
             if (Rows != other.Rows || Cols != other.Cols)
-                throw "\033[31mSize does not match! Cannot assign value!\033[31m";
+                throw runtime_error("\033[31mSize does not match! Cannot assign value!\033[31m");
             for (int i = 0; i < other.Items; i++) {
                 row[i] = other.row[i];
                 col[i] = other.col[i];
@@ -791,7 +799,7 @@ namespace MATRIX {//lab9
 
         SparseMatrix<T> operator+(const SparseMatrix &other) const {
             if (Rows != other.Rows || Cols != other.Cols)
-                throw "\033[31mSize does not match! Cannot plus!\033[31m";
+                throw runtime_error("\033[31mSize does not match! Cannot plus!\033[31m");
             //int item = Items + other.Items;
             SparseMatrix<T> result(Rows, Cols);
             result = *this;
@@ -823,7 +831,7 @@ namespace MATRIX {//lab9
 
         SparseMatrix<T> operator-(const SparseMatrix &other) const {
             if (Rows != other.Rows || Cols != other.Cols)
-                throw "\033[31mSize does not match! Cannot minus!\033[31m";
+                throw runtime_error("\033[31mSize does not match! Cannot minus!\033[31m");
             //int item = Items + other.Items;
             SparseMatrix<T> result(Rows, Cols);
             for (int i = 0; i < Items; i++) {
