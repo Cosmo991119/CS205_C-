@@ -9,14 +9,14 @@
 //opencv
 #include <math.h>
 #include <limits>
-//#include <opencv2/core/core.hpp>
-//#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
 #include <vector>
 
 //structure
 namespace MATRIX {//lab9
     using namespace std;
-    //using namespace cv;
+    using namespace cv;
 
 
     template<typename T>
@@ -618,7 +618,7 @@ namespace MATRIX {//lab9
 //            }i
 //        }
 
-/*
+
         //openCV
 
         Mat Vec2Mat() {
@@ -683,7 +683,7 @@ namespace MATRIX {//lab9
             return array;
         }
 
-*/
+
         //居然要重写等号，虽然我不知道为什么，不写赋值就会有问题。
         Matrix<T> operator=(const Matrix<T> &other) const {
             //TODO: more specific

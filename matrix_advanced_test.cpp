@@ -27,9 +27,9 @@ int main(){
         m1=m.inverse();
         m1.ShowMatrix();
 
-//        cout<<"convlve(same) of rec_mat:"<<endl;
-//        rec_m1=rec_m.conv_same(fliter);
-//        rec_m1.ShowMatrix();
+        cout<<"convlve(same) of rec_mat:"<<endl;
+        rec_m1=rec_m.conv_same(fliter);
+        rec_m1.ShowMatrix();
 
 
 

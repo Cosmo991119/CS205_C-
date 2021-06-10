@@ -85,6 +85,9 @@ int main() {
         cout << "m1's Eigenvalue: " << endl;
         Matrix<double> EigenVArr(1, 2);
         EigenVArr = m1.eigV();
+        cout << "m's inverse: " << endl;
+        (m.inverse()).ShowMatrix();
+
 
         for (int i = 0; i < 2; i++)
             cout << EigenVArr.GetItem(0, i) << ' ';
@@ -115,8 +118,9 @@ int main() {
         rec_m.ShowMatrix();
         cout << "Multiply result: " << endl;
         (rec_m * rec_m1.tran()).ShowMatrix();
-        cout << "Reshape Result" << endl;
-        (rec_m.reshape(6,1)).ShowMatrix();
+
+        //cout << "Reshape Result" << endl;
+        //(rec_m.reshape(6,1)).ShowMatrix();
 
         int row[5] = {1, 3, 2, 5, 7};
         int col[5] = {1, 3, 4, 9, 7};
