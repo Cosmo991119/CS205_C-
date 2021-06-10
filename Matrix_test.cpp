@@ -97,7 +97,10 @@ int main(){
         complex<double> z4{1, 2};
         complex<double> z[4] = {z1,z2,z3,z4};
         Matrix<complex<double>> Complex_Matrix(2,2,z);
+        Matrix<complex<double>> Complex_Matrix1(2,2);
         Complex_Matrix.ShowMatrix();
+        Complex_Matrix1 = Complex_Matrix+Complex_Matrix;
+        Complex_Matrix1.ShowMatrix();
 
     }catch(const char* msg) {
         cerr << msg << endl;
