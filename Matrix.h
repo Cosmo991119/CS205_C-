@@ -241,23 +241,36 @@ namespace MATRIX {//lab9
         }
 
         void QR_fact(Matrix<T> *A, Matrix<T> *Q, Matrix<T> *R) {
-            T sum;
-            for(int i=0;i<Rows;i++){
-                sum += pow(A->Matrixs[i][0],2);
-            }
-            for(int i=0;i<Cols;i++){
-                Q->Matrixs[i][0] = A->Matrixs[i][0]/sqrt(sum);
-            }
+            T sum = '\0';
+            for (int i = 0; i < Rows; i++)
+                sum += pow(A->Matrixs[i][0], 2);
+
+            for (int i = 0; i < Cols; i++)
+                Q->Matrixs[i][0] = A->Matrixs[i][0] / sqrt(sum);
+
             for (int i = 1; i < Rows; i++) {
-                for(int j=0;j<Cols;j++){
+                for (int j = 0; j < Cols; j++)
                     Q->Matrixs[j][i] = A->Matrixs[j][i];
+
+                for (int j = 0; j < i; j++) {
+                    sum = '\0';
+                    for (int k = 0; k < Rows; k++)
+                        sum += A->Matrixs[k][i] * Q->Matrixs[k][j];
+
+                    for (int k = 0; k < Rows; k++)
+                        Q->Matrixs[k][i] -= sum * Q->Matrixs[k][j];
+
                 }
-                for(int j=0;j<i;j++){
-                    for(int k=0;k<i;k++){
-                        
-                    }
-                }
+                sum = '\0';
+                for (int j = 0; j < Rows; j++)
+                    sum += pow(Q->Matrixs[j][i], 2);
+                for (int j = 0; j < Rows; j++)
+                    Q->Matrixs[j][i] / sqrt(sum);
             }
+            for (int i = 0; i < Rows; i++)
+                for (int j = 0; j < i + 1; j++)
+                    for (int k = 0; k < Rows; k++)
+                        R->Matrixs[j][i] += Q->Matrixs[k][j] * A[k][i];
         }
 
         Matrix<T> eigV(int times = 100) {
@@ -404,7 +417,7 @@ namespace MATRIX {//lab9
         }
 
         //mid
-        Matrix<T>  conv_same(const Matrix<T> &kernal) {
+        Matrix<T> conv_same(const Matrix<T> &kernal) {
             int k_rows = kernal.Rows;
             int k_cols = kernal.Cols;
             //kernal's pos
@@ -543,7 +556,7 @@ namespace MATRIX {//lab9
                 }
 
                 return Matrix<T>(Rows, ans_size, ans_type);
-            }else  {
+            } else {
                 throw "\033[31mSlice Type Error!\033[31m";
             }
         }
