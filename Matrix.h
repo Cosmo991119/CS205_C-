@@ -679,13 +679,13 @@ namespace MATRIX {//lab9
             col = new T[itemMax];
             val = new T[itemMax];
             for (int i = 0; i < itemMax; i++) {
-                row[i] = a;
-                col[i] = a;
+                row[i] = 0;
+                col[i] = 0;
                 val[i] = a;
             }
         }
 
-        SparseMatrix(int rows, int cols, int items, T *row_in, T *col_in, T *val_in) : Rows(rows), Cols(cols),
+        SparseMatrix(int rows, int cols, int items, int *row_in, int *col_in, T *val_in) : Rows(rows), Cols(cols),
                                                                                        Items(items),
                                                                                        itemMax(rows * cols) {
             row = new T[itemMax];
@@ -702,10 +702,18 @@ namespace MATRIX {//lab9
             Items = a;
         }
 
+        int getItems(){
+            return Items;
+        }
+
         Matrix<T> Sparse2Norm() {
-            Matrix<T> result(Rows, Cols);
+            T arr[Rows*Cols];
+            for(int i=0;i<Rows*Cols;i++)
+                arr[i]=0;
+            Matrix<T> result(Rows, Cols, arr);
+
             for (int i = 0; i < Items; i++)
-                result[row[i]][col[i]] = val[i];
+                result.ChangeItem(row[i],col[i],val[i]);
             return result;
         }
 
@@ -713,17 +721,54 @@ namespace MATRIX {//lab9
             Sparse2Norm().ShowMatrix();
         }
 
-        SparseMatrix<T> operator=(const SparseMatrix &other) const {
+        SparseMatrix<T> operator=(const SparseMatrix &other) {
             if (Rows != other.Rows || Cols != other.Cols)
                 throw "\033[31mSize does not match! Cannot assign value!\033[31m";
-
+            for(int i=0;i<other.Items;i++) {
+                row[i] = other.row[i];
+                col[i] = other.col[i];
+                val[i] = other.val[i];
+                Items = other.Items;
+            }
             return *this;
         }
 
         SparseMatrix<T> operator+(const SparseMatrix &other) const {
             if (Rows != other.Rows || Cols != other.Cols)
-                throw "\033[31mSize does not match! Cannot assign value!\033[31m";
-            int item = Items + other.Items;
+                throw "\033[31mSize does not match! Cannot plus!\033[31m";
+            //int item = Items + other.Items;
+            SparseMatrix<T> result(Rows, Cols);
+            result = *this;
+//            for (int i = 0; i < Items; i++) {
+//                result.row[i] = row[i];
+//                result.col[i] = col[i];
+//                result.val[i] = val[i];
+//            }
+            int index = Items;
+            for (int i = 0; i < other.Items; i++) {//取后者
+                for (int j = 0; j < Items; j++) {//搜前者
+                    if (row[j] == other.row[i] && col[j] == other.col[i]) {
+                        //item--;
+                        result.val[j] += other.val[i];
+                        break;
+                    } else if (j == Items - 1) {
+                        result.row[index] = other.row[i];
+                        result.col[index] = other.col[i];
+                        result.val[index] = other.val[i];
+                        index++;
+                    }
+
+                }
+            }
+            result.Items = index;
+            return result;
+
+        }
+
+        SparseMatrix<T> operator-(const SparseMatrix &other) const {
+            if (Rows != other.Rows || Cols != other.Cols)
+                throw "\033[31mSize does not match! Cannot minus!\033[31m";
+            //int item = Items + other.Items;
             SparseMatrix<T> result(Rows, Cols);
             for (int i = 0; i < Items; i++) {
                 result.row[i] = row[i];
@@ -734,18 +779,19 @@ namespace MATRIX {//lab9
             for (int i = 0; i < other.Items; i++) {
                 for (int j = 0; j < Items; j++) {
                     if (row[j] == other.row[i] && col[j] == other.col[i]) {
-                        item--;
-                        result.val[j] = val[j] + other.val[i];
+                        //item--;
+                        result.val[j] -= other.val[i];
                         break;
                     } else if (j == Items - 1) {
-                        result.row[index] = other.row[index];
-                        result.col[index] = other.col[index];
-                        result.val[index] = other.val[index];
+                        result.row[index] = other.row[i];
+                        result.col[index] = other.col[i];
+                        result.val[index] -= other.val[i];
                         index++;
                     }
 
                 }
             }
+            result.Items = index;
             return result;
 
         }

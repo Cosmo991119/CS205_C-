@@ -68,6 +68,43 @@ int main(){
         rec_m.ShowMatrix();
         cout<<"Multiply result: "<<endl;
         (rec_m*rec_m1.tran()).ShowMatrix();
+
+        int row[5]={1,3,2,5,7};
+        int col[5]={1,3,4,9,7};
+        double val[5] ={1,2,3,3,2};
+        int row1[6]={1,8,2,5,7,4};
+        int col1[6]={1,3,4,9,6,0};
+        double val1[6] ={2,6,4,7,8,9};
+        SparseMatrix<double> Spa_Mat(10,10,5,row,col,val);
+        SparseMatrix<double> Spa_Mat1(10,10,6,row1,col1,val1);
+        SparseMatrix<double> Spa_Mat2(10,10);
+        cout<<"Sparse Matrix: "<<endl;
+        Spa_Mat.ShowSparseMatrix();
+        cout<<"Items: "<<Spa_Mat.getItems()<<endl;
+        cout<<"Sparse Matrix1: "<<endl;
+        Spa_Mat1.ShowSparseMatrix();
+        cout<<"Items: "<<Spa_Mat1.getItems()<<endl;
+        cout<<"add Sparse Matrix: "<<endl;
+        Spa_Mat2 = Spa_Mat1+Spa_Mat;
+        Spa_Mat2.ShowSparseMatrix();
+        cout<<"Items: "<<Spa_Mat2.getItems()<<endl;
+        cout<<"minus Sparse Matrix: "<<endl;
+        Spa_Mat2 = Spa_Mat1-Spa_Mat;
+        Spa_Mat2.ShowSparseMatrix();
+        cout<<"Items: "<<Spa_Mat2.getItems()<<endl;
+
+
+        complex<double> z1{1, 2};
+        complex<double> z2{1, 2};
+        complex<double> z3{1, 2};
+        complex<double> z4{1, 2};
+        complex<double> z[4] = {z1,z2,z3,z4};
+        Matrix<complex<double>> Complex_Matrix(2,2,z);
+        Matrix<complex<double>> Complex_Matrix1(2,2);
+        Complex_Matrix.ShowMatrix();
+        Complex_Matrix1 = Complex_Matrix+Complex_Matrix;
+        Complex_Matrix1.ShowMatrix();
+
     }catch(const char* msg) {
         cerr << msg << endl;
     }
