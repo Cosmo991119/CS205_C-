@@ -18,6 +18,7 @@ int main() {
 
     Matrix<double> rec_m(2, 3, *rec_mat);
     Matrix<double> rec_m1(2, 3);
+
     try {
         cout << "The square matrix m: " << endl;
         m.ShowMatrix();

@@ -71,6 +71,8 @@ namespace MATRIX {//lab9
             }
         };//copy constructor, the size maybe different
 
+
+
         ~Matrix() {
             for (int i = 0; i < Rows; i++) {
                 delete[] Matrixs[i];
@@ -157,7 +159,7 @@ namespace MATRIX {//lab9
         }
 
         T sum(int row_i, int row_f, int col_i, int col_f) {
-            T SUM; //maybe need initialize?
+            T SUM = '\0'; //maybe need initialize?
             for (int i = row_i; i < row_f + 1; i++) {
                 for (int j = col_i; j < col_f + 1; j++) {
                     SUM += Matrixs[i][j];
@@ -269,16 +271,11 @@ namespace MATRIX {//lab9
             }
 
             if (Cols == 1) {//1*1
-                int *ans[1];
+                T *pt;
+                T ans[1];
+                pt = ans;
                 ans[0] = 1 / Matrixs[0][0];
-                return Matrix(1, 1, ans);
-            } else if (Cols == 2) {//2*2
-                int **ans[2][2];
-                ans[0][0] = Matrixs[1][1] / this->Det();
-                ans[1][1] = Matrixs[0][0] / this->Det();
-                ans[0][1] = -Matrixs[0][1] / this->Det();
-                ans[1][0] = -Matrixs[1][0] / this->Det();
-                return Matrix(2, 2, ans);
+                return Matrix(1, 1, pt);
             } else {//
                 //Inverted triangle
                 T **IMatrix = new T *[Rows];
@@ -371,29 +368,40 @@ namespace MATRIX {//lab9
 
                 }
 
-                return IMatrix;
+                return Matrix(Cols, Rows, IMatrix);
             }
-
 
         }
 
         //mid
-        Matrix<T> conv_same(const Matrix<T> &kernal) {
+        Matrix<T>  conv_same(const Matrix<T> &kernal) {
             int k_rows = kernal.Rows;
             int k_cols = kernal.Cols;
             //kernal's pos
-            int k_x = (int) k_rows / 2 + 1;
-            int k_y = (int) k_cols / 2 + 1;;
+            int k_x = (int) k_rows / 2;
+            int k_y = (int) k_cols / 2;
+//
+//            T ans[Rows][Cols];
 
-            T ans[Rows][Cols];
+
+
+            T **ans = new T *[Rows];
+//
+            for (int i = 0; i < Rows; i++) {
+                ans[i] = new T[Rows];
+                for (int j = 0; j < Cols; j++) {
+                    ans[i][j] = '\0';
+
+                }
+
+            }
 
             for (int i = 0; i < Rows; i++) {
 
                 for (int j = 0; j < Cols; j++) {
                     //calculate ans
-                    ans[i][j] = 0;
                     for (int k = 0; k < k_rows; k++) {
-                        for (int l = 0; l < k_cols; ++l) {
+                        for (int l = 0; l < k_cols; l++) {
                             int p_x = i - (k_x - k);
                             int p_y = j - (k_y - l);
 
@@ -407,23 +415,46 @@ namespace MATRIX {//lab9
                 }
             }
 
-            return Matrix<T>(Rows, Cols, *ans);
+//            Matrix<T> convSameMode(Rows, Cols, *ans);
+//            convSameMode.ShowMatrix();
+
+            return Matrix(Rows, Cols, ans);
+
         };
+
 
         //[a,b:c,d] not include d,b
         Matrix<T> slice(int a, int b, int c, int d) {
-            if (a >= b || c >= d || a < 0 || b >= Rows || c < 0 || d >= Cols) {
+            if (a >= b || c >= d || a < 0 || b > Rows || c < 0 || d > Cols) {
                 throw "\033[31mSlice Error!\033[31m";
             }
 
-            T ans[b - a][d - c];
-            for (int i = 0; i < b - a; i++) {
-                for (int j = 0; j < c - d; j++) {
-                    ans[i][j] = Matrixs[a + i][c + j];
+//            T ans[b - a][d - c];
+            int ans_row = b - a;
+            int ans_col = d - c;
+            T **ans_slice = new T *[ans_row];
+//            T ans[ans_row][ans_col];
+
+
+            for (int i = 0; i < ans_row; i++) {
+                ans_slice[i] = new T[ans_row];
+                for (int j = 0; j < ans_col; j++) {
+                    ans_slice[i][j] = '\0';
+
+                }
+
+            }
+
+            for (int i = 0; i < ans_row; i++) {
+                for (int j = 0; j < ans_col; j++) {
+                    ans_slice[i][j] = Matrixs[a + i][c + j];
                 }
             }
 
-            return Matrix<T>(b - a, c - d, *ans);
+//            Matrix<T> sliceMatrix(Rows, Cols, *ans);
+//            sliceMatrix.ShowMatrix();
+
+            return Matrix(Rows, Cols, ans_slice);
         }
 
         //[a,b:]
@@ -432,31 +463,58 @@ namespace MATRIX {//lab9
                 throw "\033[31mSlice Error!\033[31m";
             }
 
+            int ans_size = b - a;
+
             if (type == -1) {
-                if (a < 0 || b >= Rows) {
+                if (a < 0 || b > Rows) {
                     throw "\033[31mSlice Error!\033[31m";
                 }
-                T ans[b - a][Cols];
-                for (int i = 0; i < b - a; i++) {
+
+                T **ans_slic = new T *[ans_size];
+
+                for (int i = 0; i < ans_size; i++) {
+                    ans_slic[i] = new T[ans_size];
                     for (int j = 0; j < Cols; j++) {
-                        ans[i][j] = Matrixs[a + i][j];
+                        ans_slic[i][j] = '\0';
+
+                    }
+
+                }
+
+                for (int i = 0; i < ans_size; i++) {
+                    for (int j = 0; j < Cols; j++) {
+                        ans_slic[i][j] = Matrixs[a + i][j];
                     }
                 }
 
-                return Matrix<T>(b - a, Cols, *ans);
+                return Matrix<T>(ans_size, Cols, ans_slic);
 
             } else if (type == -2) {
-                if (a < 0 || b >= Cols) {
+                if (a < 0 || b > Cols) {
                     throw "\033[31mSlice Error!\033[31m";
                 }
-                T ans[Rows][b - a];
+
+                T **ans_type = new T *[Rows];
+
                 for (int i = 0; i < Rows; i++) {
-                    for (int j = 0; j < b - a; j++) {
-                        ans[i][j] = Matrixs[i][a + j];
+                    ans_type[i] = new T[Rows];
+                    for (int j = 0; j < ans_size; j++) {
+                        ans_type[i][j] = '\0';
+
+                    }
+
+                }
+
+
+                for (int i = 0; i < Rows; i++) {
+                    for (int j = 0; j < ans_size; j++) {
+                        ans_type[i][j] = Matrixs[i][a + j];
                     }
                 }
 
-                return Matrix<T>(Rows, b - a, *ans);
+                return Matrix<T>(Rows, ans_size, ans_type);
+            }else  {
+                throw "\033[31mSlice Type Error!\033[31m";
             }
         }
 
@@ -512,22 +570,20 @@ namespace MATRIX {//lab9
         //mat to matrixs
         Matrix<T> Mat2Vec(string pic)//read pic
         {
-            Mat img = imread(pic,0);
-            if (img.empty()){
+            Mat img = imread(pic, 0);
+            if (img.empty()) {
                 throw "\033[31mRead Picture Failed!\033[31m";
             }
 
 
-            uchar **array = new uchar*[img.rows];
-            for (int i = 0; i<img.rows; i++)
+            uchar **array = new uchar *[img.rows];
+            for (int i = 0; i < img.rows; i++)
                 array[i] = new uchar[img.cols];
 
             uchar *ptmp = NULL;
 
-            for (int i = 0; i < img.rows; i++)
-            {
-                for (int j = 0; j < img.cols; j++)
-                {
+            for (int i = 0; i < img.rows; i++) {
+                for (int j = 0; j < img.cols; j++) {
                     array[i][j] = img.at<uchar>(i, j);
                 }
             }
@@ -538,21 +594,19 @@ namespace MATRIX {//lab9
         Matrix<T> Mat2Vec(Mat img)//input Mat
         {
 //            Mat img = imread(pic,0);
-            if (img.empty()){
+            if (img.empty()) {
                 throw "\033[31mRead Picture Failed!\033[31m";
             }
 
 
-            uchar **array = new uchar*[img.rows];
-            for (int i = 0; i<img.rows; i++)
+            uchar **array = new uchar *[img.rows];
+            for (int i = 0; i < img.rows; i++)
                 array[i] = new uchar[img.cols];
 
             uchar *ptmp = NULL;
 
-            for (int i = 0; i < img.rows; i++)
-            {
-                for (int j = 0; j < img.cols; j++)
-                {
+            for (int i = 0; i < img.rows; i++) {
+                for (int j = 0; j < img.cols; j++) {
                     array[i][j] = img.at<uchar>(i, j);
                 }
             }
@@ -686,8 +740,8 @@ namespace MATRIX {//lab9
         }
 
         SparseMatrix(int rows, int cols, int items, int *row_in, int *col_in, T *val_in) : Rows(rows), Cols(cols),
-                                                                                       Items(items),
-                                                                                       itemMax(rows * cols) {
+                                                                                           Items(items),
+                                                                                           itemMax(rows * cols) {
             row = new T[itemMax];
             col = new T[itemMax];
             val = new T[itemMax];
@@ -702,18 +756,18 @@ namespace MATRIX {//lab9
             Items = a;
         }
 
-        int getItems(){
+        int getItems() {
             return Items;
         }
 
         Matrix<T> Sparse2Norm() {
-            T arr[Rows*Cols];
-            for(int i=0;i<Rows*Cols;i++)
-                arr[i]=0;
+            T arr[Rows * Cols];
+            for (int i = 0; i < Rows * Cols; i++)
+                arr[i] = 0;
             Matrix<T> result(Rows, Cols, arr);
 
             for (int i = 0; i < Items; i++)
-                result.ChangeItem(row[i],col[i],val[i]);
+                result.ChangeItem(row[i], col[i], val[i]);
             return result;
         }
 
@@ -724,7 +778,7 @@ namespace MATRIX {//lab9
         SparseMatrix<T> operator=(const SparseMatrix &other) {
             if (Rows != other.Rows || Cols != other.Cols)
                 throw "\033[31mSize does not match! Cannot assign value!\033[31m";
-            for(int i=0;i<other.Items;i++) {
+            for (int i = 0; i < other.Items; i++) {
                 row[i] = other.row[i];
                 col[i] = other.col[i];
                 val[i] = other.val[i];
