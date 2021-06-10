@@ -2,6 +2,7 @@
 // Created by Penson on 2021/6/8.
 //
 #include <iostream>
+#include <iomanip>
 #include "Matrix.h"
 //
 //using namespace std;
@@ -20,6 +21,24 @@ int main() {
     Matrix<double> rec_m1(2, 3);
 
     try {
+        cout<<"Vector Vector"<<endl;
+        double vec[3] {1, 3, 2};
+        double vec1[3] {1, 2, 1};
+        Matrix<double> vec_M(1,3,vec);
+        Matrix<double> vec_M1(1,3,vec1);
+        cout<<"Vector: "<<endl;
+        vec_M.ShowMatrix();
+        cout<<"Vector1: "<<endl;
+        vec_M1.ShowMatrix();
+        cout<<"Vector * Vector1\': "<<endl;
+        cout<<(vec_M*vec_M1.tran()).GetItem(0,0)<<endl;
+        cout<<"Vector\' * Vector1: "<<endl;
+        (vec_M.tran()*vec_M1).ShowMatrix();
+        cout<<"Vector cross Vector1: "<<endl;
+        (vec_M.CrossRow(vec_M1)).ShowMatrix();
+        cout<<"Matrix Multiply Vector: "<<endl;
+        (((vec_M.tran()*vec_M1)) * vec_M.tran()).ShowMatrix();
+
         cout << "The square matrix m: " << endl;
         m.ShowMatrix();
         cout << "m's max: " << m.max(0, 1, 0, 1) << endl;
@@ -29,19 +48,27 @@ int main() {
         cout << "Copy Matrix to m1: " << endl;
         m1 = m;
         m1.ShowMatrix();
-        cout << "m+m result(assign to m): " << endl;
+        cout << "m = m + m: " << endl;
         m = m + m;
         m.ShowMatrix();
-        cout << "m-m1 result(assign to m): " << endl;
+        cout << "m = m - m1: " << endl;
         m = m - m1;
         m.ShowMatrix();
-        cout << "m*m1 result: " << endl;
+        cout << "m*2 result: " << endl;
+        (m*2).ShowMatrix();
+        cout << "2*m result: " << endl;
+        (2*m).ShowMatrix();
+        cout << "m/2 result: " << endl;
+        (m/2.0).ShowMatrix();
+        cout << "m = m*m1 : " << endl;
         m = m * m1;
         m.ShowMatrix();
 //        cout<<"Remainder: "<<endl;
 //        (m.remainder(0,1)).ShowMatrix();
         cout << "m's Det: " << endl;
         cout << m.Det() << endl;
+        cout << "m's Trace: " << endl;
+        cout << m.trace() << endl;
 
         double det[3][3] = {{3, 5,  7},
                             {7, 11, 13},
@@ -58,10 +85,15 @@ int main() {
         cout << "m1's Eigenvalue: " << endl;
         Matrix<double> EigenVArr(1,2);
         EigenVArr = m1.eigV();
+
+        for(int i=0;i<2;i++)
+            cout<<EigenVArr.GetItem(0,i)<<' ';
+        cout<<endl;
 //
         cout << "The rectangle matrix: " << endl;
         rec_m.ShowMatrix();
-        cout << "max: " << rec_m.max(0, 1, 0, 2) << endl;
+        cout << "max between{[0,0][0,1]}: " << rec_m.max(0, 0, 0, 1) << endl;
+        cout << "max of all: " << rec_m.max(0, 1, 0, 2) << endl;
         cout << "min: " << rec_m.min(0, 1, 0, 2) << endl;
         cout << "sum: " << rec_m.sum(0, 1, 0, 2) << endl;
         cout << "avg: " << rec_m.avg(0, 1, 0, 2) << endl;

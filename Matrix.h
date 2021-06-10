@@ -9,14 +9,14 @@
 //opencv
 #include <math.h>
 #include <limits>
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
+//#include <opencv2/core/core.hpp>
+//#include <opencv2/highgui/highgui.hpp>
 #include <vector>
 
 //structure
 namespace MATRIX {//lab9
     using namespace std;
-    using namespace cv;
+    //using namespace cv;
 
 
     template<typename T>
@@ -270,12 +270,12 @@ namespace MATRIX {//lab9
             for (int i = 0; i < Rows; i++)
                 for (int j = 0; j < i + 1; j++)
                     for (int k = 0; k < Rows; k++)
-                        R->Matrixs[j][i] += Q->Matrixs[k][j] * A[k][i];
+                        R->Matrixs[j][i] += Q->Matrixs[k][j] * A->Matrixs[k][i];
             for(int i=0;i<Rows;i++)
                 for(int j=0;j<Rows;j++) {
                     A->Matrixs[i][j] = 0;
                     for (int k = 0; k < Rows; k++)
-                        A->Matrixs[i][j] += R->Matrixs[i][k]*Q[k][j];
+                        A->Matrixs[i][j] += R->Matrixs[i][k]*Q->Matrixs[k][j];
                 }
 
             for(int i=0;i<Rows;i++)
@@ -294,11 +294,12 @@ namespace MATRIX {//lab9
 
             Matrix<T> Q(Rows, Cols);
             Matrix<T> R(Rows, Cols);
-            Matrix<T> A(Rows, Cols, *this);
+            Matrix<T> A(*this);
             for (int t = 0; t < times; t++) {
                 QR_fact(&A,&Q,&R);
             }
             Matrix<T> result(1,Cols);
+            //A.ShowMatrix();
             for(int i=0;i<Rows;i++)
                 result.Matrixs[0][i] = A.Matrixs[i][i];
             return result;
@@ -611,7 +612,7 @@ namespace MATRIX {//lab9
 //            }i
 //        }
 
-
+/*
         //openCV
 
         Mat Vec2Mat() {
@@ -676,7 +677,7 @@ namespace MATRIX {//lab9
             return array;
         }
 
-
+*/
         //居然要重写等号，虽然我不知道为什么，不写赋值就会有问题。
         Matrix<T> operator=(const Matrix<T> &other) const {
             //TODO: more specific
@@ -713,7 +714,7 @@ namespace MATRIX {//lab9
 
 
         Matrix<T> operator*(const Matrix<T> &other) const {
-            if (Rows != other.Cols || Cols != other.Rows)
+            if ( Cols != other.Rows)
                 throw "\033[31mSize does not match! Cannot multiply!\033[31m";
             Matrix<T> result(Rows, other.Cols);
             for (int i = 0; i < Rows; i++)
@@ -742,7 +743,15 @@ namespace MATRIX {//lab9
             Matrix<T> result(Rows, Cols);
             for (int i = 0; i < Rows; i++)
                 for (int j = 0; j < Cols; j++)
-                    result.Matrixs[i][j] = k * result.Matrixs[i][j];
+                    result.Matrixs[i][j] = k * Matrixs[i][j];
+            return result;
+        }
+
+        friend Matrix<T> operator*(const T k,const Matrix<T> Mat)  {
+            Matrix<T> result(Mat.Rows, Mat.Cols);
+            for (int i = 0; i < Mat.Rows; i++)
+                for (int j = 0; j < Mat.Cols; j++)
+                    result.Matrixs[i][j] = k * Mat.Matrixs[i][j];
             return result;
         }
 
@@ -750,7 +759,7 @@ namespace MATRIX {//lab9
             Matrix<T> result(Rows, Cols);
             for (int i = 0; i < Rows; i++)
                 for (int j = 0; j < Cols; j++)
-                    result.Matrixs[i][j] = result.Matrixs[i][j] / k;
+                    result.Matrixs[i][j] = Matrixs[i][j] / k;
             return result;
         }
 
@@ -764,12 +773,12 @@ namespace MATRIX {//lab9
                 result.Matrixs[0][2] = 0;
             } else if (Cols == 2) {
                 result.Matrixs[0][0] = 0;
-                result.Matrixs[0][0] = 0;
-                result.Matrixs[0][0] = Matrixs[0][0] * other.Matrixs[0][1] - Matrixs[0][1] * other.Matrixs[0][0];
+                result.Matrixs[0][1] = 0;
+                result.Matrixs[0][2] = Matrixs[0][0] * other.Matrixs[0][1] - Matrixs[0][1] * other.Matrixs[0][0];
             } else if (Cols == 3) {
                 result.Matrixs[0][0] = Matrixs[0][1] * other.Matrixs[0][2] - Matrixs[0][2] * other.Matrixs[0][1];
-                result.Matrixs[0][0] = Matrixs[0][2] * other.Matrixs[0][0] - Matrixs[0][0] * other.Matrixs[0][2];
-                result.Matrixs[0][0] = Matrixs[0][0] * other.Matrixs[0][1] - Matrixs[0][1] * other.Matrixs[0][0];
+                result.Matrixs[0][1] = Matrixs[0][2] * other.Matrixs[0][0] - Matrixs[0][0] * other.Matrixs[0][2];
+                result.Matrixs[0][2] = Matrixs[0][0] * other.Matrixs[0][1] - Matrixs[0][1] * other.Matrixs[0][0];
             }
             return result;
         }
