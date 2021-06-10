@@ -66,7 +66,7 @@ namespace MATRIX {//lab9
             for (int i = 0; i < mat.Rows; i++) {
                 Matrixs[i] = new T[mat.Rows];
                 for (int j = 0; j < mat.Cols; j++) {
-                    Matrixs[i][j] = mat.Mat[i][j];
+                    Matrixs[i][j] = mat.Matrixs[i][j];
                 }
             }
         };//copy constructor, the size maybe different
@@ -178,7 +178,7 @@ namespace MATRIX {//lab9
             Matrix TRAN(Cols, Rows);
             for (int i = 0; i < Rows; i++)
                 for (int j = 0; j < Cols; j++)
-                    TRAN.Mat[j][i] = Matrixs[i][j];
+                    TRAN.Matrixs[j][i] = Matrixs[i][j];
             return TRAN;
         }
 
@@ -212,7 +212,7 @@ namespace MATRIX {//lab9
                         m_j++;
                     if (m_i == i)
                         m_i++;
-                    remain_mat.Mat[r_i][r_j] = Matrixs[m_i][m_j];
+                    remain_mat.Matrixs[r_i][r_j] = Matrixs[m_i][m_j];
                     m_j++;
                 }
                 m_i++;
@@ -568,7 +568,7 @@ namespace MATRIX {//lab9
                 throw "\033[31mSize does not match! Cannot assign value!\033[31m";
             for (int i = 0; i < Rows; i++)
                 for (int j = 0; j < Cols; j++)
-                    Matrixs[i][j] = other.Mat[i][j];
+                    Matrixs[i][j] = other.Matrixs[i][j];
             //result.ShowMatrix();
             return *this;
         }
@@ -579,7 +579,7 @@ namespace MATRIX {//lab9
             Matrix<T> result(Rows, Cols);//constructor反了，搞到这里直接转置了hhh
             for (int i = 0; i < Rows; i++)
                 for (int j = 0; j < Cols; j++)
-                    result.Mat[i][j] = Matrixs[i][j] + other.Mat[i][j];
+                    result.Matrixs[i][j] = Matrixs[i][j] + other.Matrixs[i][j];
             //result.ShowMatrix();
             return result;
         }
@@ -590,7 +590,7 @@ namespace MATRIX {//lab9
             Matrix<T> result(Rows, Cols);
             for (int i = 0; i < Rows; i++)
                 for (int j = 0; j < Cols; j++)
-                    result.Mat[i][j] = Matrixs[i][j] - other.Mat[i][j];
+                    result.Matrixs[i][j] = Matrixs[i][j] - other.Matrixs[i][j];
             //result.ShowMatrix();
             return result;
         }
@@ -605,7 +605,7 @@ namespace MATRIX {//lab9
                     for (int k = 0; k < other.Rows; k++) {
                         //cout<<"**********"<<endl;
                         //result.ShowMatrix();
-                        result.Mat[i][j] += Matrixs[i][k] * other.Mat[k][j];
+                        result.Matrixs[i][j] += Matrixs[i][k] * other.Matrixs[k][j];
                         //result.ShowMatrix();
                     }
             //result.ShowMatrix();
@@ -618,7 +618,7 @@ namespace MATRIX {//lab9
             Matrix<T> result(Rows, other.Cols);
             for (int i = 0; i < Rows; i++)
                 for (int j = 0; j < other.Cols; j++)
-                    result.Mat[i][j] = Matrixs[i][j] * other.Mat[i][j];
+                    result.Matrixs[i][j] = Matrixs[i][j] * other.Matrixs[i][j];
             return result;
         }
 
@@ -626,7 +626,7 @@ namespace MATRIX {//lab9
             Matrix<T> result(Rows, Cols);
             for (int i = 0; i < Rows; i++)
                 for (int j = 0; j < Cols; j++)
-                    result.Mat[i][j] = k * result.Mat[i][j];
+                    result.Matrixs[i][j] = k * result.Matrixs[i][j];
             return result;
         }
 
@@ -634,7 +634,7 @@ namespace MATRIX {//lab9
             Matrix<T> result(Rows, Cols);
             for (int i = 0; i < Rows; i++)
                 for (int j = 0; j < Cols; j++)
-                    result.Mat[i][j] = result.Mat[i][j] / k;
+                    result.Matrixs[i][j] = result.Matrixs[i][j] / k;
             return result;
         }
 
@@ -643,17 +643,17 @@ namespace MATRIX {//lab9
                 throw "Not vectors! Cannot done cross product";
             Matrix<T> result(1, 3);
             if (Cols == 1) {
-                result.Mat[0][0] = 0;
-                result.Mat[0][1] = 0;
-                result.Mat[0][2] = 0;
+                result.Matrixs[0][0] = 0;
+                result.Matrixs[0][1] = 0;
+                result.Matrixs[0][2] = 0;
             } else if (Cols == 2) {
-                result.Mat[0][0] = 0;
-                result.Mat[0][0] = 0;
-                result.Mat[0][0] = Matrixs[0][0] * other.Mat[0][1] - Matrixs[0][1] * other.Mat[0][0];
+                result.Matrixs[0][0] = 0;
+                result.Matrixs[0][0] = 0;
+                result.Matrixs[0][0] = Matrixs[0][0] * other.Matrixs[0][1] - Matrixs[0][1] * other.Matrixs[0][0];
             } else if (Cols == 3) {
-                result.Mat[0][0] = Matrixs[0][1] * other.Mat[0][2] - Matrixs[0][2] * other.Mat[0][1];
-                result.Mat[0][0] = Matrixs[0][2] * other.Mat[0][0] - Matrixs[0][0] * other.Mat[0][2];
-                result.Mat[0][0] = Matrixs[0][0] * other.Mat[0][1] - Matrixs[0][1] * other.Mat[0][0];
+                result.Matrixs[0][0] = Matrixs[0][1] * other.Matrixs[0][2] - Matrixs[0][2] * other.Matrixs[0][1];
+                result.Matrixs[0][0] = Matrixs[0][2] * other.Matrixs[0][0] - Matrixs[0][0] * other.Matrixs[0][2];
+                result.Matrixs[0][0] = Matrixs[0][0] * other.Matrixs[0][1] - Matrixs[0][1] * other.Matrixs[0][0];
             }
             return result;
         }
