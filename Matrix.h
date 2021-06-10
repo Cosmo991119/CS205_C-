@@ -157,7 +157,7 @@ namespace MATRIX {//lab9
         }
 
         T sum(int row_i, int row_f, int col_i, int col_f) {
-            T SUM; //maybe need initialize?
+            T SUM='\0'; //maybe need initialize?
             for (int i = row_i; i < row_f + 1; i++) {
                 for (int j = col_i; j < col_f + 1; j++) {
                     SUM += Matrixs[i][j];
@@ -269,17 +269,12 @@ namespace MATRIX {//lab9
             }
 
             if (Cols == 1) {//1*1
-                int *ans[1];
+                T *pt;
+                T ans[1];
+                pt=ans;
                 ans[0] = 1 / Matrixs[0][0];
-                return Matrix(1, 1, ans);
-            } else if (Cols == 2) {//2*2
-                int **ans[2][2];
-                ans[0][0] = Matrixs[1][1] / this->Det();
-                ans[1][1] = Matrixs[0][0] / this->Det();
-                ans[0][1] = -Matrixs[0][1] / this->Det();
-                ans[1][0] = -Matrixs[1][0] / this->Det();
-                return Matrix(2, 2, ans);
-            } else {//
+                return Matrix(1, 1, pt);
+            }else {//
                 //Inverted triangle
                 T **IMatrix = new T *[Rows];
                 T **t = new T *[Rows];
@@ -371,9 +366,8 @@ namespace MATRIX {//lab9
 
                 }
 
-                return IMatrix;
+                return Matrix(Cols,Rows,IMatrix);
             }
-
 
         }
 

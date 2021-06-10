@@ -16,6 +16,7 @@ int main(){
 
     Matrix<double> rec_m(2, 3, *rec_mat);
     Matrix<double> rec_m1(2, 3);
+
     try {
         cout << "The square matrix: " << endl;
         m.ShowMatrix();
@@ -104,6 +105,7 @@ int main(){
         Complex_Matrix.ShowMatrix();
         Complex_Matrix1 = Complex_Matrix+Complex_Matrix;
         Complex_Matrix1.ShowMatrix();
+
 
     }catch(const char* msg) {
         cerr << msg << endl;
