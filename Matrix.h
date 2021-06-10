@@ -6,11 +6,17 @@
 #define WSL_MATRIX_H
 
 #include <complex>
+//opencv
+#include <math.h>
+#include <limits>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
 #include <vector>
 
 //structure
 namespace MATRIX {//lab9
     using namespace std;
+    using namespace cv;
 
 
     template<typename T>
@@ -20,56 +26,56 @@ namespace MATRIX {//lab9
         int Rows;
         int size;
         //other properity
-        T **Mat;//lab12, a pointer to point the matrix
+        T **Matrixs;//lab12, a pointer to point the matrix
     public:
         //hbx：我直接改了，先rows再cols
         Matrix(int rows, int cols) : Rows(rows), Cols(cols), size(rows * cols) {
             T a;
-            Mat = new T *[rows];
+            Matrixs = new T *[rows];
             for (int i = 0; i < rows; i++) {
-                Mat[i] = new T[cols];
+                Matrixs[i] = new T[cols];
                 for (int j = 0; j < cols; j++)
-                    Mat[i][j] = a;//得显式初始化一下，不然乘法会不正常。（我也不知道为什么但实践得）
+                    Matrixs[i][j] = a;//得显式初始化一下，不然乘法会不正常。（我也不知道为什么但实践得）
             }
         };
 
         Matrix(int rows, int cols, T *p) : Rows(rows), Cols(cols), size(rows * cols) {
-            Mat = new T *[rows];
+            Matrixs = new T *[rows];
             T *pr = p;
             for (int i = 0; i < rows; i++) {
-                Mat[i] = new T[cols];
+                Matrixs[i] = new T[cols];
                 for (int j = 0; j < cols; j++) {
-                    Mat[i][j] = *(pr++);
+                    Matrixs[i][j] = *(pr++);
                 }
             }
         }; //one dimension array
 
         Matrix(int rows, int cols, T **p) : Rows(rows), Cols(cols), size(rows * cols) {
-            Mat = new T *[rows];
+            Matrixs = new T *[rows];
             for (int i = 0; i < rows; i++) {
-                Mat[i] = new T[cols];
+                Matrixs[i] = new T[cols];
                 for (int j = 0; j < cols; j++) {
-                    Mat[i][j] = p[i][j];
+                    Matrixs[i][j] = p[i][j];
                 }
             }
         }; //two dimension array
 
         Matrix(const Matrix &mat) : Rows(mat.Rows), Cols(mat.Cols), size(mat.size) {
-            Mat = new T *[mat.Rows];
+            Matrixs = new T *[mat.Rows];
 
             for (int i = 0; i < mat.Rows; i++) {
-                Mat[i] = new T[mat.Rows];
+                Matrixs[i] = new T[mat.Rows];
                 for (int j = 0; j < mat.Cols; j++) {
-                    Mat[i][j] = mat.Mat[i][j];
+                    Matrixs[i][j] = mat.Mat[i][j];
                 }
             }
         };//copy constructor, the size maybe different
 
         ~Matrix() {
             for (int i = 0; i < Rows; i++) {
-                delete[] Mat[i];
+                delete[] Matrixs[i];
             }
-            delete[] Mat;
+            delete[] Matrixs;
         }// deconstructor
 
         //get some values of matrix
@@ -89,7 +95,7 @@ namespace MATRIX {//lab9
             for (int i = 0; i < Rows; i++) {
                 cout << "[ ";
                 for (int j = 0; j < Cols; j++) {
-                    cout << Mat[i][j] << " ";
+                    cout << Matrixs[i][j] << " ";
                 }
                 cout << "]" << endl;
             }
@@ -98,21 +104,21 @@ namespace MATRIX {//lab9
 
 
         T **GetMatrix() {
-            return Mat;
+            return Matrixs;
         };
 
         T GetItem(int col, int row) {
-            return Mat[col][row];
+            return Matrixs[col][row];
         };
 
         void ChangeItem(int col, int row, T val) {
-            Mat[col][row] = val;
+            Matrixs[col][row] = val;
         };
 
         T *GetColum(int col) {
             T *arr[Rows];
             for (int i = 0; i < Rows; ++i) {
-                arr[i] = Mat[col][i];
+                arr[i] = Matrixs[col][i];
             }
             return arr;
         };
@@ -120,7 +126,7 @@ namespace MATRIX {//lab9
         T *GetRow(int row) {
             T *arr[Cols];
             for (int i = 0; i < Cols; ++i) {
-                arr[i] = Mat[i][row];
+                arr[i] = Matrixs[i][row];
             }
             return arr;
         };
@@ -129,22 +135,22 @@ namespace MATRIX {//lab9
         //column/row initial, column/row final(0~Cols-1)
         //可做局部比大小、加和
         T max(int row_i, int row_f, int col_i, int col_f) {
-            T MAX = Mat[row_i][col_i];
+            T MAX = Matrixs[row_i][col_i];
             for (int i = row_i; i < row_f + 1; i++) {
                 for (int j = col_i; j < col_f + 1; j++) {
-                    if (Mat[i][j] > MAX)
-                        MAX = Mat[i][j];
+                    if (Matrixs[i][j] > MAX)
+                        MAX = Matrixs[i][j];
                 }
             }
             return MAX;
         }
 
         T min(int row_i, int row_f, int col_i, int col_f) {
-            T MIN = Mat[row_i][col_i];
+            T MIN = Matrixs[row_i][col_i];
             for (int i = row_i; i < row_f + 1; i++) {
                 for (int j = col_i; j < col_f + 1; j++) {
-                    if (Mat[i][j] < MIN)
-                        MIN = Mat[i][j];
+                    if (Matrixs[i][j] < MIN)
+                        MIN = Matrixs[i][j];
                 }
             }
             return MIN;
@@ -154,7 +160,7 @@ namespace MATRIX {//lab9
             T SUM; //maybe need initialize?
             for (int i = row_i; i < row_f + 1; i++) {
                 for (int j = col_i; j < col_f + 1; j++) {
-                    SUM += Mat[i][j];
+                    SUM += Matrixs[i][j];
                 }
             }
             return SUM;
@@ -172,7 +178,7 @@ namespace MATRIX {//lab9
             Matrix TRAN(Cols, Rows);
             for (int i = 0; i < Rows; i++)
                 for (int j = 0; j < Cols; j++)
-                    TRAN.Mat[j][i] = Mat[i][j];
+                    TRAN.Mat[j][i] = Matrixs[i][j];
             return TRAN;
         }
 
@@ -181,7 +187,7 @@ namespace MATRIX {//lab9
                 throw "\033[31msquare Error: \033[0mthe matrixs must be a square matrix.";
             T TRACE;
             for (int i = 0; i < Rows; i++)
-                TRACE += Mat[i][i];
+                TRACE += Matrixs[i][i];
             return TRACE;
         }
 
@@ -190,7 +196,7 @@ namespace MATRIX {//lab9
             Matrix result(Rows, Cols);
             for (int i = 0; i < Rows; i++) {
                 for (int j = 0; j < Cols; j++) {
-                    result.Mat[i][j] = conj(Mat[i][j]);
+                    result.Mat[i][j] = conj(Matrixs[i][j]);
                 }
             }
             return result;
@@ -206,7 +212,7 @@ namespace MATRIX {//lab9
                         m_j++;
                     if (m_i == i)
                         m_i++;
-                    remain_mat.Mat[r_i][r_j] = Mat[m_i][m_j];
+                    remain_mat.Mat[r_i][r_j] = Matrixs[m_i][m_j];
                     m_j++;
                 }
                 m_i++;
@@ -223,10 +229,10 @@ namespace MATRIX {//lab9
             T det_val;
             //Matrix<T> mat_mid(Rows,Cols);
             if (Rows == 2)
-                return Mat[0][0] * Mat[1][1] - Mat[0][1] * Mat[1][0];
+                return Matrixs[0][0] * Matrixs[1][1] - Matrixs[0][1] * Matrixs[1][0];
             else {
                 for (int i = 0; i < Rows; i++)
-                    det_val += pow(-1, i) * Mat[i][0] * Remainder(i, 0).Det();
+                    det_val += pow(-1, i) * Matrixs[i][0] * Remainder(i, 0).Det();
             }
             return det_val;
 
@@ -264,14 +270,14 @@ namespace MATRIX {//lab9
 
             if (Cols == 1) {//1*1
                 int *ans[1];
-                ans[0] = 1 / Mat[0][0];
+                ans[0] = 1 / Matrixs[0][0];
                 return Matrix(1, 1, ans);
             } else if (Cols == 2) {//2*2
                 int **ans[2][2];
-                ans[0][0] = Mat[1][1] / this->Det();
-                ans[1][1] = Mat[0][0] / this->Det();
-                ans[0][1] = -Mat[0][1] / this->Det();
-                ans[1][0] = -Mat[1][0] / this->Det();
+                ans[0][0] = Matrixs[1][1] / this->Det();
+                ans[1][1] = Matrixs[0][0] / this->Det();
+                ans[0][1] = -Matrixs[0][1] / this->Det();
+                ans[1][0] = -Matrixs[1][0] / this->Det();
                 return Matrix(2, 2, ans);
             } else {//
                 //Inverted triangle
@@ -283,7 +289,7 @@ namespace MATRIX {//lab9
                     IMatrix[i] = new T[Rows];
 
                     for (int j = 0; j < Cols; j++) {
-                        t[i][j] = Mat[i][j];
+                        t[i][j] = Matrixs[i][j];
 
                         if (i == j)
                             IMatrix[i][j] = 1;
@@ -394,7 +400,7 @@ namespace MATRIX {//lab9
                             if (p_x < 0 || p_x >= Rows || p_y < 0 || p_y > Cols) {
                                 continue;
                             } else {
-                                ans[i][j] += Mat[p_x][p_y] * kernal.Mat[k][l];
+                                ans[i][j] += Matrixs[p_x][p_y] * kernal.Mat[k][l];
                             }
                         }
                     }
@@ -413,7 +419,7 @@ namespace MATRIX {//lab9
             T ans[b - a][d - c];
             for (int i = 0; i < b - a; i++) {
                 for (int j = 0; j < c - d; j++) {
-                    ans[i][j] = Mat[a + i][c + j];
+                    ans[i][j] = Matrixs[a + i][c + j];
                 }
             }
 
@@ -433,7 +439,7 @@ namespace MATRIX {//lab9
                 T ans[b - a][Cols];
                 for (int i = 0; i < b - a; i++) {
                     for (int j = 0; j < Cols; j++) {
-                        ans[i][j] = Mat[a + i][j];
+                        ans[i][j] = Matrixs[a + i][j];
                     }
                 }
 
@@ -446,7 +452,7 @@ namespace MATRIX {//lab9
                 T ans[Rows][b - a];
                 for (int i = 0; i < Rows; i++) {
                     for (int j = 0; j < b - a; j++) {
-                        ans[i][j] = Mat[i][a + j];
+                        ans[i][j] = Matrixs[i][a + j];
                     }
                 }
 
@@ -486,6 +492,75 @@ namespace MATRIX {//lab9
 //        }
 
 
+        //openCV
+
+        Mat Vec2Mat() {
+
+            Mat img(Rows, Cols, CV_8UC1);
+            uchar *ptmp = NULL;
+            for (int i = 0; i < Rows; ++i) {
+                ptmp = img.ptr<uchar>(i);
+
+                for (int j = 0; j < Cols; ++j) {
+                    ptmp[j] = Matrixs[i][j];
+                }
+            }
+
+            return img;
+        }
+
+        //mat to matrixs
+        Matrix<T> Mat2Vec(string pic)//read pic
+        {
+            Mat img = imread(pic,0);
+            if (img.empty()){
+                throw "\033[31mRead Picture Failed!\033[31m";
+            }
+
+
+            uchar **array = new uchar*[img.rows];
+            for (int i = 0; i<img.rows; i++)
+                array[i] = new uchar[img.cols];
+
+            uchar *ptmp = NULL;
+
+            for (int i = 0; i < img.rows; i++)
+            {
+                for (int j = 0; j < img.cols; j++)
+                {
+                    array[i][j] = img.at<uchar>(i, j);
+                }
+            }
+
+            return array;
+        }
+
+        Matrix<T> Mat2Vec(Mat img)//input Mat
+        {
+//            Mat img = imread(pic,0);
+            if (img.empty()){
+                throw "\033[31mRead Picture Failed!\033[31m";
+            }
+
+
+            uchar **array = new uchar*[img.rows];
+            for (int i = 0; i<img.rows; i++)
+                array[i] = new uchar[img.cols];
+
+            uchar *ptmp = NULL;
+
+            for (int i = 0; i < img.rows; i++)
+            {
+                for (int j = 0; j < img.cols; j++)
+                {
+                    array[i][j] = img.at<uchar>(i, j);
+                }
+            }
+
+            return array;
+        }
+
+
         //居然要重写等号，虽然我不知道为什么，不写赋值就会有问题。
         Matrix<T> operator=(const Matrix<T> &other) const {
             //TODO: more specific
@@ -493,7 +568,7 @@ namespace MATRIX {//lab9
                 throw "\033[31mSize does not match! Cannot assign value!\033[31m";
             for (int i = 0; i < Rows; i++)
                 for (int j = 0; j < Cols; j++)
-                    Mat[i][j] = other.Mat[i][j];
+                    Matrixs[i][j] = other.Mat[i][j];
             //result.ShowMatrix();
             return *this;
         }
@@ -504,7 +579,7 @@ namespace MATRIX {//lab9
             Matrix<T> result(Rows, Cols);//constructor反了，搞到这里直接转置了hhh
             for (int i = 0; i < Rows; i++)
                 for (int j = 0; j < Cols; j++)
-                    result.Mat[i][j] = Mat[i][j] + other.Mat[i][j];
+                    result.Mat[i][j] = Matrixs[i][j] + other.Mat[i][j];
             //result.ShowMatrix();
             return result;
         }
@@ -515,7 +590,7 @@ namespace MATRIX {//lab9
             Matrix<T> result(Rows, Cols);
             for (int i = 0; i < Rows; i++)
                 for (int j = 0; j < Cols; j++)
-                    result.Mat[i][j] = Mat[i][j] - other.Mat[i][j];
+                    result.Mat[i][j] = Matrixs[i][j] - other.Mat[i][j];
             //result.ShowMatrix();
             return result;
         }
@@ -530,7 +605,7 @@ namespace MATRIX {//lab9
                     for (int k = 0; k < other.Rows; k++) {
                         //cout<<"**********"<<endl;
                         //result.ShowMatrix();
-                        result.Mat[i][j] += Mat[i][k] * other.Mat[k][j];
+                        result.Mat[i][j] += Matrixs[i][k] * other.Mat[k][j];
                         //result.ShowMatrix();
                     }
             //result.ShowMatrix();
@@ -543,7 +618,7 @@ namespace MATRIX {//lab9
             Matrix<T> result(Rows, other.Cols);
             for (int i = 0; i < Rows; i++)
                 for (int j = 0; j < other.Cols; j++)
-                    result.Mat[i][j] = Mat[i][j] * other.Mat[i][j];
+                    result.Mat[i][j] = Matrixs[i][j] * other.Mat[i][j];
             return result;
         }
 
@@ -574,11 +649,11 @@ namespace MATRIX {//lab9
             } else if (Cols == 2) {
                 result.Mat[0][0] = 0;
                 result.Mat[0][0] = 0;
-                result.Mat[0][0] = Mat[0][0] * other.Mat[0][1] - Mat[0][1] * other.Mat[0][0];
+                result.Mat[0][0] = Matrixs[0][0] * other.Mat[0][1] - Matrixs[0][1] * other.Mat[0][0];
             } else if (Cols == 3) {
-                result.Mat[0][0] = Mat[0][1] * other.Mat[0][2] - Mat[0][2] * other.Mat[0][1];
-                result.Mat[0][0] = Mat[0][2] * other.Mat[0][0] - Mat[0][0] * other.Mat[0][2];
-                result.Mat[0][0] = Mat[0][0] * other.Mat[0][1] - Mat[0][1] * other.Mat[0][0];
+                result.Mat[0][0] = Matrixs[0][1] * other.Mat[0][2] - Matrixs[0][2] * other.Mat[0][1];
+                result.Mat[0][0] = Matrixs[0][2] * other.Mat[0][0] - Matrixs[0][0] * other.Mat[0][2];
+                result.Mat[0][0] = Matrixs[0][0] * other.Mat[0][1] - Matrixs[0][1] * other.Mat[0][0];
             }
             return result;
         }
