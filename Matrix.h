@@ -271,6 +271,19 @@ namespace MATRIX {//lab9
                 for (int j = 0; j < i + 1; j++)
                     for (int k = 0; k < Rows; k++)
                         R->Matrixs[j][i] += Q->Matrixs[k][j] * A[k][i];
+            for(int i=0;i<Rows;i++)
+                for(int j=0;j<Rows;j++) {
+                    A->Matrixs[i][j] = 0;
+                    for (int k = 0; k < Rows; k++)
+                        A->Matrixs[i][j] += R->Matrixs[i][k]*Q[k][j];
+                }
+
+            for(int i=0;i<Rows;i++)
+                for(int j=0;j<Rows;j++){
+                    Q->ChangeItem(i,j,0);
+                    R->ChangeItem(i,j,0);
+
+                }
         }
 
         Matrix<T> eigV(int times = 100) {
@@ -283,8 +296,12 @@ namespace MATRIX {//lab9
             Matrix<T> R(Rows, Cols);
             Matrix<T> A(Rows, Cols, *this);
             for (int t = 0; t < times; t++) {
-                QR_fact
+                QR_fact(&A,&Q,&R);
             }
+            Matrix<T> result(1,Cols);
+            for(int i=0;i<Rows;i++)
+                result.Matrixs[0][i] = A.Matrixs[i][i];
+            return result;
         }
 
 //        T EigenValue() {

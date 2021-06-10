@@ -42,16 +42,22 @@ int main() {
 //        (m.remainder(0,1)).ShowMatrix();
         cout << "m's Det: " << endl;
         cout << m.Det() << endl;
-        cout << "Det: " << endl;
+
         double det[3][3] = {{3, 5,  7},
                             {7, 11, 13},
                             {2, 4,  7}};
         Matrix<double> det_m(3, 3, *det);
+        cout << "m2: " << endl;
+        det_m.ShowMatrix();
+        cout << "m2's Det: " << endl;
 //        Matrix<double> det_mcpy(det_m);
 //        det_mcpy.ShowMatrix();
 //        det_m.ShowMatrix();
         //(det_m.Remainder(0,0)).ShowMatrix();
         cout << det_m.Det() << endl;
+        cout << "m1's Eigenvalue: " << endl;
+        Matrix<double> EigenVArr(1,2);
+        EigenVArr = m1.eigV();
 //
         cout << "The rectangle matrix: " << endl;
         rec_m.ShowMatrix();
