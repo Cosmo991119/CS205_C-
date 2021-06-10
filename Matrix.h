@@ -243,13 +243,20 @@ namespace MATRIX {//lab9
         void QR_fact(Matrix<T> *A, Matrix<T> *Q, Matrix<T> *R) {
             T sum;
             for(int i=0;i<Rows;i++){
-                sum += A->Matrixs[i][0]*A->Matrixs[i][0];
+                sum += pow(A->Matrixs[i][0],2);
             }
             for(int i=0;i<Cols;i++){
-                sum += A->Matrixs[i][0]*A->Matrixs[i][0];
+                Q->Matrixs[i][0] = A->Matrixs[i][0]/sqrt(sum);
             }
-            for (int r_index = 0; r_index < Rows; r_index++) {
-
+            for (int i = 1; i < Rows; i++) {
+                for(int j=0;j<Cols;j++){
+                    Q->Matrixs[j][i] = A->Matrixs[j][i];
+                }
+                for(int j=0;j<i;j++){
+                    for(int k=0;k<i;k++){
+                        
+                    }
+                }
             }
         }
 
