@@ -30,7 +30,7 @@ namespace MATRIX {//lab9
     public:
         //hbx：我直接改了，先rows再cols
         Matrix(int rows, int cols) : Rows(rows), Cols(cols), size(rows * cols) {
-            T a;
+            T a = '\0';
             Matrixs = new T *[rows];
             for (int i = 0; i < rows; i++) {
                 Matrixs[i] = new T[cols];
@@ -673,7 +673,7 @@ namespace MATRIX {//lab9
         int itemMax;
     public:
         SparseMatrix(int rows, int cols) : Rows(rows), Cols(cols), itemMax(rows * cols) {
-            T a;
+            T a = '\0';
             Items = 0;
             row = new T[itemMax];
             col = new T[itemMax];
