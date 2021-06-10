@@ -240,12 +240,35 @@ namespace MATRIX {//lab9
 
         }
 
+        void QR_fact(Matrix<T> *A, Matrix<T> *Q, Matrix<T> *R) {
+            T sum;
+            for(int i=0;i<Rows;i++){
+                sum += A->Matrixs[i][0]*A->Matrixs[i][0];
+            }
+            for(int i=0;i<Cols;i++){
+                sum += A->Matrixs[i][0]*A->Matrixs[i][0];
+            }
+            for (int r_index = 0; r_index < Rows; r_index++) {
+
+            }
+        }
+
+        Matrix<T> eigV(int times = 100) {
+            if (Cols != Rows)
+                throw "\033[31mSize Error: \033[0mThe matrix is not square matrix!";//need to do throw exception
+            if (Det() == 0)
+                throw "Cannot use QR method. Not a Full-rank Matrix!";
+
+            Matrix<T> Q(Rows, Cols);
+            Matrix<T> R(Rows, Cols);
+            Matrix<T> A(Rows, Cols, *this);
+            for (int t = 0; t < times; t++) {
+                QR_fact
+            }
+        }
 
 //        T EigenValue() {
-//            if (Cols != Rows)
-//                throw "\033[31mSize Error: \033[0mThe matrix is not square matrix!";//need to do throw exception
-//            if (Det() == 0)
-//                throw "Cannot use QR method. Not a Full-rank Matrix!"
+//
 //
 //
 //        }
@@ -849,6 +872,8 @@ namespace MATRIX {//lab9
             return result;
 
         }
+
+
     };
 
 

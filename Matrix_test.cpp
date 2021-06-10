@@ -47,7 +47,9 @@ int main() {
                             {7, 11, 13},
                             {2, 4,  7}};
         Matrix<double> det_m(3, 3, *det);
-        det_m.ShowMatrix();
+//        Matrix<double> det_mcpy(det_m);
+//        det_mcpy.ShowMatrix();
+//        det_m.ShowMatrix();
         //(det_m.Remainder(0,0)).ShowMatrix();
         cout << det_m.Det() << endl;
 //
