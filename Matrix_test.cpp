@@ -91,6 +91,14 @@ int main(){
         cout<<"Items: "<<Spa_Mat2.getItems()<<endl;
 
 
+        complex<double> z1{1, 2};
+        complex<double> z2{1, 2};
+        complex<double> z3{1, 2};
+        complex<double> z4{1, 2};
+        complex<double> z[4] = {z1,z2,z3,z4};
+        Matrix<complex<double>> Complex_Matrix(2,2,z);
+        Complex_Matrix.ShowMatrix();
+
     }catch(const char* msg) {
         cerr << msg << endl;
     }

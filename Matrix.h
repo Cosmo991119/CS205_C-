@@ -663,11 +663,12 @@ namespace MATRIX {//lab9
                 throw "\033[31mSize does not match! Cannot plus!\033[31m";
             //int item = Items + other.Items;
             SparseMatrix<T> result(Rows, Cols);
-            for (int i = 0; i < Items; i++) {
-                result.row[i] = row[i];
-                result.col[i] = col[i];
-                result.val[i] = val[i];
-            }
+            result = *this;
+//            for (int i = 0; i < Items; i++) {
+//                result.row[i] = row[i];
+//                result.col[i] = col[i];
+//                result.val[i] = val[i];
+//            }
             int index = Items;
             for (int i = 0; i < other.Items; i++) {//取后者
                 for (int j = 0; j < Items; j++) {//搜前者
