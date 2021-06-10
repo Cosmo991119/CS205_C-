@@ -21,23 +21,23 @@ int main() {
     Matrix<double> rec_m1(2, 3);
 
     try {
-        cout<<"Vector Vector"<<endl;
-        double vec[3] {1, 3, 2};
-        double vec1[3] {1, 2, 1};
-        Matrix<double> vec_M(1,3,vec);
-        Matrix<double> vec_M1(1,3,vec1);
-        cout<<"Vector: "<<endl;
+        cout << "Vector Vector" << endl;
+        double vec[3]{1, 3, 2};
+        double vec1[3]{1, 2, 1};
+        Matrix<double> vec_M(1, 3, vec);
+        Matrix<double> vec_M1(1, 3, vec1);
+        cout << "Vector: " << endl;
         vec_M.ShowMatrix();
-        cout<<"Vector1: "<<endl;
+        cout << "Vector1: " << endl;
         vec_M1.ShowMatrix();
-        cout<<"Vector * Vector1\': "<<endl;
-        cout<<(vec_M*vec_M1.tran()).GetItem(0,0)<<endl;
-        cout<<"Vector\' * Vector1: "<<endl;
-        (vec_M.tran()*vec_M1).ShowMatrix();
-        cout<<"Vector cross Vector1: "<<endl;
+        cout << "Vector * Vector1\': " << endl;
+        cout << (vec_M * vec_M1.tran()).GetItem(0, 0) << endl;
+        cout << "Vector\' * Vector1: " << endl;
+        (vec_M.tran() * vec_M1).ShowMatrix();
+        cout << "Vector cross Vector1: " << endl;
         (vec_M.CrossRow(vec_M1)).ShowMatrix();
-        cout<<"Matrix Multiply Vector: "<<endl;
-        (((vec_M.tran()*vec_M1)) * vec_M.tran()).ShowMatrix();
+        cout << "Matrix Multiply Vector: " << endl;
+        (((vec_M.tran() * vec_M1)) * vec_M.tran()).ShowMatrix();
 
         cout << "The square matrix m: " << endl;
         m.ShowMatrix();
@@ -55,11 +55,11 @@ int main() {
         m = m - m1;
         m.ShowMatrix();
         cout << "m*2 result: " << endl;
-        (m*2).ShowMatrix();
+        (m * 2).ShowMatrix();
         cout << "2*m result: " << endl;
-        (2*m).ShowMatrix();
+        (2 * m).ShowMatrix();
         cout << "m/2 result: " << endl;
-        (m/2.0).ShowMatrix();
+        (m / 2.0).ShowMatrix();
         cout << "m = m*m1 : " << endl;
         m = m * m1;
         m.ShowMatrix();
@@ -83,12 +83,14 @@ int main() {
         //(det_m.Remainder(0,0)).ShowMatrix();
         cout << det_m.Det() << endl;
         cout << "m1's Eigenvalue: " << endl;
-        Matrix<double> EigenVArr(1,2);
+        Matrix<double> EigenVArr(1, 2);
         EigenVArr = m1.eigV();
 
-        for(int i=0;i<2;i++)
-            cout<<EigenVArr.GetItem(0,i)<<' ';
-        cout<<endl;
+        for (int i = 0; i < 2; i++)
+            cout << EigenVArr.GetItem(0, i) << ' ';
+        cout << endl;
+        cout << "m.eleWiseMul(m1): " << endl;
+        (m.eleWiseMul(m1)).ShowMatrix();
 //
         cout << "The rectangle matrix: " << endl;
         rec_m.ShowMatrix();
@@ -113,6 +115,8 @@ int main() {
         rec_m.ShowMatrix();
         cout << "Multiply result: " << endl;
         (rec_m * rec_m1.tran()).ShowMatrix();
+        cout << "Reshape Result" << endl;
+        (rec_m.reshape(6,1)).ShowMatrix();
 
         int row[5] = {1, 3, 2, 5, 7};
         int col[5] = {1, 3, 4, 9, 7};

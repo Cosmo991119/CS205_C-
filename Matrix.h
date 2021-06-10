@@ -271,17 +271,17 @@ namespace MATRIX {//lab9
                 for (int j = 0; j < i + 1; j++)
                     for (int k = 0; k < Rows; k++)
                         R->Matrixs[j][i] += Q->Matrixs[k][j] * A->Matrixs[k][i];
-            for(int i=0;i<Rows;i++)
-                for(int j=0;j<Rows;j++) {
+            for (int i = 0; i < Rows; i++)
+                for (int j = 0; j < Rows; j++) {
                     A->Matrixs[i][j] = 0;
                     for (int k = 0; k < Rows; k++)
-                        A->Matrixs[i][j] += R->Matrixs[i][k]*Q->Matrixs[k][j];
+                        A->Matrixs[i][j] += R->Matrixs[i][k] * Q->Matrixs[k][j];
                 }
 
-            for(int i=0;i<Rows;i++)
-                for(int j=0;j<Rows;j++){
-                    Q->ChangeItem(i,j,0);
-                    R->ChangeItem(i,j,0);
+            for (int i = 0; i < Rows; i++)
+                for (int j = 0; j < Rows; j++) {
+                    Q->ChangeItem(i, j, 0);
+                    R->ChangeItem(i, j, 0);
 
                 }
         }
@@ -296,11 +296,11 @@ namespace MATRIX {//lab9
             Matrix<T> R(Rows, Cols);
             Matrix<T> A(*this);
             for (int t = 0; t < times; t++) {
-                QR_fact(&A,&Q,&R);
+                QR_fact(&A, &Q, &R);
             }
-            Matrix<T> result(1,Cols);
+            Matrix<T> result(1, Cols);
             //A.ShowMatrix();
-            for(int i=0;i<Rows;i++)
+            for (int i = 0; i < Rows; i++)
                 result.Matrixs[0][i] = A.Matrixs[i][i];
             return result;
         }
@@ -314,15 +314,21 @@ namespace MATRIX {//lab9
         T EigenVector();//vector
 
         //advanced operator implement
-        void reshape(int cols, int rows) {
-            if (cols * rows != Cols * Rows) {
-                throw "\033[31mSize Error: \033[0mthe matrixs must has same size.";//need to do throw exception
-            }
+//        Matrix<T> reshape(int rows, int cols) {
+//            if (cols * rows != Cols * Rows) {
+//                throw "\033[31mSize Error: \033[0mthe matrixs must has same size.";//need to do throw exception
+//            }
+//            Matrix<T> result(cols, rows);
+//            T arr[cols * rows];
+//            for (int i = 0; i < Rows; i++)
+//                for (int j = 0; i < Cols; j++)
+//                    arr[i * Cols + j] = Matrixs[i][j];
+//            for (int i = 0; i < rows; i++)
+//                for (int j = 0; j < cols; j++)
+//                    result.Matrixs[i][j] = arr[i * cols + j];
+//            return result;
+//        }
 
-            Cols = cols;
-            Rows = rows;
-
-        };
 
         //Gauss-Jordan Elimination Method
         Matrix<T> inverse() {
@@ -435,7 +441,7 @@ namespace MATRIX {//lab9
         }
 
         //mid
-        Matrix<T>  conv_same(const Matrix<T> &kernal) {
+        Matrix<T> conv_same(const Matrix<T> &kernal) {
             int k_rows = kernal.Rows;
             int k_cols = kernal.Cols;
             //kernal's pos
@@ -576,7 +582,7 @@ namespace MATRIX {//lab9
                 }
 
                 return Matrix<T>(Rows, ans_size, ans_type);
-            }else  {
+            } else {
                 throw "\033[31mSlice Type Error!\033[31m";
             }
         }
@@ -714,7 +720,7 @@ namespace MATRIX {//lab9
 
 
         Matrix<T> operator*(const Matrix<T> &other) const {
-            if ( Cols != other.Rows)
+            if (Cols != other.Rows)
                 throw "\033[31mSize does not match! Cannot multiply!\033[31m";
             Matrix<T> result(Rows, other.Cols);
             for (int i = 0; i < Rows; i++)
@@ -747,7 +753,7 @@ namespace MATRIX {//lab9
             return result;
         }
 
-        friend Matrix<T> operator*(const T k,const Matrix<T> Mat)  {
+        friend Matrix<T> operator*(const T k, const Matrix<T> Mat) {
             Matrix<T> result(Mat.Rows, Mat.Cols);
             for (int i = 0; i < Mat.Rows; i++)
                 for (int j = 0; j < Mat.Cols; j++)
