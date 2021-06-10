@@ -27,20 +27,23 @@ int main(){
         m1=m.inverse();
         m1.ShowMatrix();
 
-        cout<<"convlve(same) of rec_mat:"<<endl;
-        rec_m1=rec_m.conv_same(fliter);
-        rec_m1.ShowMatrix();
+//        cout<<"convlve(same) of rec_mat:"<<endl;
+//        rec_m1=rec_m.conv_same(fliter);
+//        rec_m1.ShowMatrix();
 
 
-//        cout<<"Slice:"<<endl;
-////        double conv[3][3];
-//        Matrix<double> slice_a(2, 2);
-//        slice_a=rec_m.slice(0,2,0,2);
 
-//        cout<<"Slice: slice rows"<<endl;
-//        Matrix<double> slice_b(1, 3);
-//        slice_b=rec_m.slice(1,2,-1);
-//        slice_b.ShowMatrix();
+
+        cout<<"Slice:"<<endl;
+        double conv[3][3];
+        Matrix<double> slice_a(2, 2);
+        slice_a=rec_m.slice(0,2,0,2);
+        slice_a.ShowMatrix();
+
+        cout<<"Slice: slice rows"<<endl;
+        Matrix<double> slice_b(1, 3);
+        slice_b=rec_m.slice(1,2,-1);
+        slice_b.ShowMatrix();
 
 //        cout<<"Slice: slice cols"<<endl;
 //        Matrix<double> slice_c(2, 2);

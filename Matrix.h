@@ -30,7 +30,7 @@ namespace MATRIX {//lab9
     public:
         //hbx：我直接改了，先rows再cols
         Matrix(int rows, int cols) : Rows(rows), Cols(cols), size(rows * cols) {
-            T a;
+            T a='\0';
             Matrixs = new T *[rows];
             for (int i = 0; i < rows; i++) {
                 Matrixs[i] = new T[cols];
@@ -41,11 +41,11 @@ namespace MATRIX {//lab9
 
         Matrix(int rows, int cols, T *p) : Rows(rows), Cols(cols), size(rows * cols) {
             Matrixs = new T *[rows];
-            T *pr = p;
+
             for (int i = 0; i < rows; i++) {
                 Matrixs[i] = new T[cols];
                 for (int j = 0; j < cols; j++) {
-                    Matrixs[i][j] = *(pr++);
+                    Matrixs[i][j] = *(p++);
                 }
             }
         }; //one dimension array
@@ -388,18 +388,20 @@ namespace MATRIX {//lab9
             T **ans = new T *[Rows];
 //
             for (int i = 0; i < Rows; i++) {
-                ans[i] = new T[Rows];
-                for (int j = 0; j < Cols; j++) {
-                    ans[i][j] = '\0';
-
-                }
+                ans[i] = new T[Cols];
+//                for (int j = 0; j < Cols; j++) {
+//                    ans[i][j] = '\0';
+//
+//                }
 
             }
+
 
             for (int i = 0; i < Rows; i++) {
 
                 for (int j = 0; j < Cols; j++) {
                     //calculate ans
+                    ans[i][j] = '\0';
                     for (int k = 0; k < k_rows; k++) {
                         for (int l = 0; l < k_cols; l++) {
                             int p_x = i - (k_x - k);
@@ -437,7 +439,7 @@ namespace MATRIX {//lab9
 
 
             for (int i = 0; i < ans_row; i++) {
-                ans_slice[i] = new T[ans_row];
+                ans_slice[i] = new T[ans_col];
                 for (int j = 0; j < ans_col; j++) {
                     ans_slice[i][j] = '\0';
 
@@ -454,7 +456,7 @@ namespace MATRIX {//lab9
 //            Matrix<T> sliceMatrix(Rows, Cols, *ans);
 //            sliceMatrix.ShowMatrix();
 
-            return Matrix(Rows, Cols, ans_slice);
+            return Matrix(ans_row, ans_col, ans_slice);
         }
 
         //[a,b:]
@@ -473,7 +475,7 @@ namespace MATRIX {//lab9
                 T **ans_slic = new T *[ans_size];
 
                 for (int i = 0; i < ans_size; i++) {
-                    ans_slic[i] = new T[ans_size];
+                    ans_slic[i] = new T[Cols];
                     for (int j = 0; j < Cols; j++) {
                         ans_slic[i][j] = '\0';
 
@@ -497,7 +499,7 @@ namespace MATRIX {//lab9
                 T **ans_type = new T *[Rows];
 
                 for (int i = 0; i < Rows; i++) {
-                    ans_type[i] = new T[Rows];
+                    ans_type[i] = new T[ans_size];
                     for (int j = 0; j < ans_size; j++) {
                         ans_type[i][j] = '\0';
 
