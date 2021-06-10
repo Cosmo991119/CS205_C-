@@ -3,8 +3,10 @@
 //
 #include <iostream>
 #include "Matrix.h"
-using namespace std;
+//
+//using namespace std;
 using namespace MATRIX;
+
 int main(){
     double mat[2][2] = {{1,2},{3,4}};
     double rec_mat[2][3] = {{1,2,3},{1,3,2}};
@@ -43,7 +45,7 @@ int main(){
         det_m.ShowMatrix();
         (det_m.Remainder(0,0)).ShowMatrix();
         cout<<det_m.Det()<<endl;
-
+//
         cout << "The rectangle matrix: " << endl;
         rec_m.ShowMatrix();
         cout << "max: " << rec_m.max(0, 1, 0, 2) << endl;
@@ -54,6 +56,7 @@ int main(){
         Matrix<double> rec_m_tran(3,2);
         rec_m_tran=rec_m.tran();
         rec_m_tran.ShowMatrix();
+
         cout<<"Copy Matrix: "<<endl;
         rec_m1=rec_m;
         rec_m1.ShowMatrix();
