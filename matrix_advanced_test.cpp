@@ -59,12 +59,12 @@ int main() {
         m.ChangeItem(0,0,10);
         m.ShowMatrix();
 
-//        auto mat1 = imread("./water.jpg", 0);
-//        auto vec = Mat2Vec(mat1);
-//        auto mat2 = vec.Vec2Mat();
-//        imshow("image", mat2);
-//        waitKey(0);
-//        destroyAllWindows();
+        auto mat1 = imread("./water.jpg", 0);
+        auto vec = Mat2Vec(mat1);
+        auto mat2 = vec.Vec2Mat();
+        imshow("image", mat2);
+        waitKey(0);
+        destroyAllWindows();
 
     } catch (const char *msg) {
         cerr << msg << endl;
