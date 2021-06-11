@@ -287,9 +287,9 @@ namespace MATRIX {//lab9
 
         Matrix<T> eigV(int times = 100) {
             if (Cols != Rows)
-                throw "\033[31mSize Error: \033[0mThe matrix is not square matrix!";//need to do throw exception
+                throw runtime_error("\033[31mSize Error: \033[0mThe matrix is not square matrix!");//need to do throw exception
             if (Det() == 0)
-                throw "Cannot use QR method. Not a Full-rank Matrix!";
+                throw runtime_error("Cannot use QR method. Not a Full-rank Matrix!");
 
             Matrix<T> Q(Rows, Cols);
             Matrix<T> R(Rows, Cols);
@@ -316,7 +316,7 @@ namespace MATRIX {//lab9
         Matrix<T> reshape(int rows, int cols) {
 
             if (cols * rows != Cols * Rows) {
-                throw "\033[31mSize Error: \033[0mthe matrixs must has same size.";//need to do throw exception
+                throw runtime_error("\033[31mSize Error: \033[0mthe matrixs must has same size.");//need to do throw exception
             }
 
             Matrix<T> result(rows, cols);
@@ -336,7 +336,7 @@ namespace MATRIX {//lab9
         Matrix<T> inverse() {
             if (Cols != Rows) {
                 throw
-                        "\033[31msquare Error: \033[0mthe matrixs must be a square matrix.";
+                        runtime_error("\033[31msquare Error: \033[0mthe matrixs must be a square matrix.");
             }
 
             if (Cols == 1) {//1*1
@@ -678,7 +678,7 @@ namespace MATRIX {//lab9
 
         Matrix<T> operator*(const Matrix<T> &other) const {
             if (Cols != other.Rows)
-                throw "\033[31mSize does not match! Cannot multiply!\033[31m";
+                throw runtime_error("\033[31mSize does not match! Cannot multiply!\033[31m");
             Matrix<T> result(Rows, other.Cols);
             for (int i = 0; i < Rows; i++)
                 for (int j = 0; j < other.Cols; j++)
@@ -788,7 +788,7 @@ namespace MATRIX {//lab9
         for (int i = 0; i < img.rows; i++)
             array[i] = new uchar[img.cols];
 
-        uchar *ptmp = NULL;
+        uchar *ptmp = nullptr;
 
         for (int i = 0; i < img.rows; i++) {
             for (int j = 0; j < img.cols; j++) {
@@ -826,7 +826,7 @@ namespace MATRIX {//lab9
             }
         }
 
-        SparseMatrix(int rows, int cols, int items, int *row_in, int *col_in, T *val_in) : Rows(rows), Cols(cols),
+        SparseMatrix(int rows, int cols, int items, const int *row_in, const int *col_in, T *val_in) : Rows(rows), Cols(cols),
                                                                                            Items(items),
                                                                                            itemMax(rows * cols) {
             row = new T[itemMax];
@@ -944,6 +944,6 @@ namespace MATRIX {//lab9
     };
 
 
-};
+}
 
 #endif //WSL_MATRIX_H
