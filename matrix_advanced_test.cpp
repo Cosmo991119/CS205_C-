@@ -31,7 +31,10 @@ int main() {
         m1 = m.inverse();
         m1.ShowMatrix();
 
-        cout << "convlve(same) of rec_mat:" << endl;
+        cout << "reshape of m:" << endl;
+        (m.reshape(1,4)).ShowMatrix();
+
+        cout << "convolution(same) of rec_mat:" << endl;
         rec_m1 = rec_m.conv_same(fliter);
         rec_m1.ShowMatrix();
 
@@ -52,17 +55,16 @@ int main() {
         slice_c = rec_m.slice(0, 2, -2);
         slice_c.ShowMatrix();
 
+        cout<<"Change item:"<<endl;
+        m.ChangeItem(0,0,10);
+        m.ShowMatrix();
 
-
-//        cout<<"Change item:"<<endl;
-//        m.ChangeItem(0,0,10);
-//        m.ShowMatrix();
-        auto mat1 = imread("/mnt/e/南方科技大学/homework/2021春季/C++/pro/water.jpg", 0);
-        auto vec = Mat2Vec(mat1);
-        auto mat2 = vec.Vec2Mat();
-        imshow("image", mat2);
-        waitKey(0);
-        destroyAllWindows();
+//        auto mat1 = imread("./water.jpg", 0);
+//        auto vec = Mat2Vec(mat1);
+//        auto mat2 = vec.Vec2Mat();
+//        imshow("image", mat2);
+//        waitKey(0);
+//        destroyAllWindows();
 
     } catch (const char *msg) {
         cerr << msg << endl;

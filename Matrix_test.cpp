@@ -107,20 +107,20 @@ int main() {
         rec_m_tran = rec_m.tran();
         rec_m_tran.ShowMatrix();
 
-        cout << "Copy Matrix: " << endl;
+        cout << "m1 = m: " << endl;
         rec_m1 = rec_m;
         rec_m1.ShowMatrix();
-        cout << "Add result: " << endl;
+        cout << "m = m + m: " << endl;
         rec_m = rec_m + rec_m;
         rec_m.ShowMatrix();
-        cout << "Minus result: " << endl;
+        cout << "m = m - m1: " << endl;
         rec_m = rec_m - rec_m1;
         rec_m.ShowMatrix();
-        cout << "Multiply result: " << endl;
+        cout << "m * m1': " << endl;
         (rec_m * rec_m1.tran()).ShowMatrix();
 
-        //cout << "Reshape Result" << endl;
-        //(rec_m.reshape(6,1)).ShowMatrix();
+        cout << "Reshape m from (3*2) to (2*3)" << endl;
+        (rec_m.reshape(2,3)).ShowMatrix();
 
         int row[5] = {1, 3, 2, 5, 7};
         int col[5] = {1, 3, 4, 9, 7};

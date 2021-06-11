@@ -313,20 +313,24 @@ namespace MATRIX {//lab9
         T EigenVector();//vector
 
         //advanced operator implement
-//        Matrix<T> reshape(int rows, int cols) {
-//            if (cols * rows != Cols * Rows) {
-//                throw "\033[31mSize Error: \033[0mthe matrixs must has same size.";//need to do throw exception
-//            }
-//            Matrix<T> result(cols, rows);
-//            T arr[cols * rows];
-//            for (int i = 0; i < Rows; i++)
-//                for (int j = 0; i < Cols; j++)
-//                    arr[i * Cols + j] = Matrixs[i][j];
-//            for (int i = 0; i < rows; i++)
-//                for (int j = 0; j < cols; j++)
-//                    result.Matrixs[i][j] = arr[i * cols + j];
-//            return result;
-//        }
+        Matrix<T> reshape(int rows, int cols) {
+
+            if (cols * rows != Cols * Rows) {
+                cout << "here2";
+                throw "\033[31mSize Error: \033[0mthe matrixs must has same size.";//need to do throw exception
+            }
+
+            Matrix<T> result(rows, cols);
+            T arr[cols * rows];
+            for (int i = 0; i < Rows; i++)
+                for (int j = 0; j < Cols; j++)
+                    arr[i * Cols + j] = Matrixs[i][j];
+
+            for (int i = 0; i < rows; i++)
+                for (int j = 0; j < cols; j++)
+                    result.Matrixs[i][j] = arr[i * cols + j];
+            return result;
+        }
 
 
         //Gauss-Jordan Elimination Method
