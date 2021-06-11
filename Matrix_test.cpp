@@ -30,6 +30,8 @@ int main() {
         vec_M.ShowMatrix();
         cout << "Vector1: " << endl;
         vec_M1.ShowMatrix();
+//        cout << "Vector * Vector1: " << endl;
+//        cout << (vec_M * vec_M1).GetItem(0, 0) << endl;
         cout << "Vector * Vector1\': " << endl;
         cout << (vec_M * vec_M1.tran()).GetItem(0, 0) << endl;
         cout << "Vector\' * Vector1: " << endl;
@@ -95,8 +97,12 @@ int main() {
         cout << "m.eleWiseMul(m1): " << endl;
         (m.eleWiseMul(m1)).ShowMatrix();
 //
+//        cout<<"Assign Squre matrix to Rectangular Matrix:"<<endl;
+//        rec_m = m;
         cout << "The rectangle matrix: " << endl;
         rec_m.ShowMatrix();
+//        cout<<"Determinant of rectangle matrix: "<<endl;
+//        rec_m.Det();
         cout << "max between{[0,0][0,1]}: " << rec_m.max(0, 0, 0, 1) << endl;
         cout << "max of all: " << rec_m.max(0, 1, 0, 2) << endl;
         cout << "min: " << rec_m.min(0, 1, 0, 2) << endl;
@@ -121,6 +127,8 @@ int main() {
 
         cout << "Reshape m from (3*2) to (2*3)" << endl;
         (rec_m.reshape(2,3)).ShowMatrix();
+        cout << "Reshape m from (2*3) to (2*1)" << endl;
+        (rec_m.reshape(2,1)).ShowMatrix();
 
         int row[5] = {1, 3, 2, 5, 7};
         int col[5] = {1, 3, 4, 9, 7};

@@ -316,7 +316,6 @@ namespace MATRIX {//lab9
         Matrix<T> reshape(int rows, int cols) {
 
             if (cols * rows != Cols * Rows) {
-                cout << "here2";
                 throw "\033[31mSize Error: \033[0mthe matrixs must has same size.";//need to do throw exception
             }
 
@@ -614,8 +613,7 @@ namespace MATRIX {//lab9
 //            }i
 //        }
 
-
-        //openCV
+//openCV
 
         Mat Vec2Mat() {
 
@@ -633,6 +631,7 @@ namespace MATRIX {//lab9
         }
 
         //mat to matrixs
+
 
 
 
@@ -799,6 +798,7 @@ namespace MATRIX {//lab9
 
         return Vec2;
     }
+
 
     template<typename T>
     class SparseMatrix {
