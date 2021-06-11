@@ -18,6 +18,7 @@ int main() {
     //int (*p)[2] = mat;
     Matrix<double> m(2, 2, *mat);
     Matrix<double> m1(2, 2);
+    Matrix<double> re(1, 4);
 
     Matrix<double> rec_m(2, 3, *rec_mat);
     Matrix<double> rec_m1(2, 3);

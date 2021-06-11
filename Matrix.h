@@ -484,6 +484,8 @@ namespace MATRIX {//lab9
 
             return Matrix<T>(Rows, Cols, convthesame);
 
+
+
         };
 
 
